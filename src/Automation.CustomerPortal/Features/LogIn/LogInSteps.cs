@@ -25,18 +25,12 @@ namespace Automation.CustomerPortal.Features.LogIn
             _logInPage = _turbo.GetPage<CustomerPortalApp, LogInPage>(_browser);
         }
         
-        [Given(@"I have entered superuser@costar\.com as user name")]
-        public void GivenIHaveEnteredSuperuserCostar_ComAsUserName()
+        [Given(@"I have entered correct credentials")]
+        public void GivenIHaveEnteredCorrectCredentialsAsUserName()
         {
             ScenarioContext.Current.Pending();
         }
-        
-        [Given(@"I have entered superuser as password")]
-        public void GivenIHaveEnteredSuperuserAsPassword()
-        {
-            ScenarioContext.Current.Pending();
-        }
-        
+
         [When(@"I press Login button")]
         public void WhenIPressLoginButton()
         {
