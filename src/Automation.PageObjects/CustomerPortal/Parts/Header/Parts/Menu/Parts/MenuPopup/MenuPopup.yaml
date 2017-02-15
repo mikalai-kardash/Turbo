@@ -1,0 +1,7 @@
+﻿selector: #menuNavContainer
+contents:
+	customer tools: #menuNavList a
+	my listings: #menuNavList a
+	reviews: #menuNavList a
+	ad analytics: #menuNavList a
+	mobile apps: #menuNavList a

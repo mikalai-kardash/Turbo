@@ -1,0 +1,2 @@
+﻿selector : #mainHeader.mainHeader
+	signIn: #headerLoginSection.loginSection a

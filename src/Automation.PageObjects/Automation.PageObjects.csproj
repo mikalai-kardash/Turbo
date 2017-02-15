@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1BB47A47-C194-4D0D-87F8-BCFA84370D07}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Automation.PageObjects</RootNamespace>
+    <AssemblyName>Automation.PageObjects</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WebDriver, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selenium.WebDriver.3.0.1\lib\net40\WebDriver.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WebDriver.Support, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selenium.Support.3.0.1\lib\net40\WebDriver.Support.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Apartments\ApartmentsApp.cs" />
+    <Compile Include="Apartments\Pages\Home\HomePage.cs" />
+    <Compile Include="Apartments\Pages\Home\Parts\QuickSearch.cs" />
+    <Compile Include="Apartments\Pages\MobileApps\MobileAppsPage.cs" />
+    <Compile Include="Apartments\Parts\BedsBaths\BedsBathsSelector.cs" />
+    <Compile Include="Apartments\Parts\Headers\CommonHeader.cs" />
+    <Compile Include="Apartments\Parts\Headers\Parts\Menu.cs" />
+    <Compile Include="Apartments\Parts\RentRange\RentRangeSelector.cs" />
+    <Compile Include="Apartments\Parts\SignIn\SignInPopup.cs" />
+    <Compile Include="Apartments\Parts\SignIn\SignUpPopup.cs" />
+    <Compile Include="Apartments\Parts\Typeahead\Typeahead.cs" />
+    <Compile Include="CustomerPortal\CustomerPortalApp.cs" />
+    <Compile Include="CustomerPortal\Pages\AdAnalytics\AdAnalyticsPage.cs" />
+    <Compile Include="CustomerPortal\Pages\Dashboard\DashboardPage.cs" />
+    <Compile Include="CustomerPortal\Pages\LogIn\LogInPage.cs" />
+    <Compile Include="CustomerPortal\Pages\LogIn\Parts\LogIn\CustomerLogIn.cs" />
+    <Compile Include="CustomerPortal\Pages\LogIn\Parts\Register\RegisterCustomer.cs" />
+    <Compile Include="CustomerPortal\Pages\MyListings\MyListingsPage.cs" />
+    <Compile Include="CustomerPortal\Pages\Reviews\ReviewsDashboardPage.cs" />
+    <Compile Include="CustomerPortal\Parts\Footer\Footer.cs" />
+    <Compile Include="CustomerPortal\Parts\Header\Header.cs" />
+    <Compile Include="CustomerPortal\Parts\Header\Parts\Menu\Menu.cs" />
+    <Compile Include="CustomerPortal\Parts\Header\Parts\Menu\Parts\MenuPopup\MenuPopup.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CustomerPortal\Pages\LogIn\LogInPage.yaml" />
+    <EmbeddedResource Include="CustomerPortal\CustomerPortalApp.yaml" />
+    <None Include="CustomerPortal\Parts\Header\Header.yaml" />
+    <EmbeddedResource Include="CustomerPortal\Parts\Header\Parts\Menu\Menu.yaml" />
+    <None Include="CustomerPortal\Parts\Header\Parts\Menu\Parts\MenuPopup\MenuPopup.yaml" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
