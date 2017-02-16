@@ -49,8 +49,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationMetadata.cs" />
     <Compile Include="DefaultObjectFactory.cs" />
     <Compile Include="IObjectFactory.cs" />
+    <Compile Include="PageMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TurboConfiguration.cs" />
     <Compile Include="TurboFactory.cs" />
