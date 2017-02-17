@@ -52,6 +52,16 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Automation.PageObjects\Automation.PageObjects.csproj">
+      <Project>{1bb47a47-c194-4d0d-87f8-bcfa84370d07}</Project>
+      <Name>Automation.PageObjects</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Turbo\Turbo.csproj">
+      <Project>{32bfe0a4-e471-4b9f-9118-c715d86ac94d}</Project>
+      <Name>Turbo</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

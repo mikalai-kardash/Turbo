@@ -1,24 +1,13 @@
 ﻿using BoDi;
 using TechTalk.SpecFlow;
-using Turbo;
 
 namespace Automation.CustomerPortal
 {
     [Binding]
-    public class TurboInit
+    public class TurboInit : SpecFlow.Bindings.Turbo
     {
-        private readonly IObjectContainer _container;
-
-        public TurboInit(IObjectContainer container)
+        public TurboInit(IObjectContainer container) : base(container)
         {
-            _container = container;
-        }
-
-        [BeforeScenario]
-        public void Init()
-        {
-            var turbo = TurboInitializer.Init();
-            _container.RegisterInstanceAs(turbo);
         }
     }
 }

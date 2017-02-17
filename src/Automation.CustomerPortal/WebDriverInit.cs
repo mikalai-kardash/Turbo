@@ -1,25 +1,15 @@
-﻿using BoDi;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
+﻿using Automation.SpecFlow.Bindings;
+using BoDi;
 using TechTalk.SpecFlow;
 
 namespace Automation.CustomerPortal
 {
     [Binding]
-    public class WebDriverInit
+    public class WebDriverInit : WebDriver
     {
-        private readonly IObjectContainer _container;
-
         public WebDriverInit(IObjectContainer container)
+            : base(container)
         {
-            _container = container;
-        }
-
-        [BeforeScenario]
-        public void Init()
-        {
-            var driver = new ChromeDriver();
-            _container.RegisterInstanceAs<IWebDriver>(driver);
         }
     }
 }

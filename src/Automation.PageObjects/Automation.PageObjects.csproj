@@ -82,6 +82,12 @@
     <None Include="CustomerPortal\Parts\Header\Parts\Menu\Parts\MenuPopup\MenuPopup.yaml" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Turbo\Turbo.csproj">
+      <Project>{32bfe0a4-e471-4b9f-9118-c715d86ac94d}</Project>
+      <Name>Turbo</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

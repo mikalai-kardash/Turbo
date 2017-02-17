@@ -70,6 +70,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Features\Search\" />
     <Folder Include="Features\SignIn\" />
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +91,18 @@
     <ProjectReference Include="..\Automation.PageObjects\Automation.PageObjects.csproj">
       <Project>{1bb47a47-c194-4d0d-87f8-bcfa84370d07}</Project>
       <Name>Automation.PageObjects</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Automation.SpecFlow\Automation.SpecFlow.csproj">
+      <Project>{78d7aaea-0670-4ca1-b744-b32eed677ec6}</Project>
+      <Name>Automation.SpecFlow</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Automation\Automation.csproj">
+      <Project>{ea26a57f-99f8-4d93-a700-7c43da2f7f3b}</Project>
+      <Name>Automation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Turbo\Turbo.csproj">
+      <Project>{32bfe0a4-e471-4b9f-9118-c715d86ac94d}</Project>
+      <Name>Turbo</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
