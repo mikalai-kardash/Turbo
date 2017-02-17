@@ -36,6 +36,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="WebDriver, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selenium.WebDriver.3.0.1\lib\net40\WebDriver.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -50,7 +55,24 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Metadata\YamlMetadataLoaderTests.cs" />
+    <Compile Include="PageBuilderTests.cs" />
+    <Compile Include="PageObjects\Google\GoogleSearchApp.cs" />
+    <Compile Include="PageObjects\Google\Pages\Search\Parts\Header\Header.cs" />
+    <Compile Include="PageObjects\Google\Pages\Search\Parts\MetaNotEmbedded\MetaNotEmbedded.cs" />
+    <Compile Include="PageObjects\Google\Pages\Search\Parts\NoMeta\NoMeta.cs" />
+    <Compile Include="PageObjects\Google\Pages\Search\SearchPage.cs" />
+    <Compile Include="PageObjects\Test\Pages\Empty2\Empty2Page.cs" />
+    <Compile Include="PageObjects\Test\Pages\Empty\EmptyPage.cs" />
+    <Compile Include="PageObjects\Test\Pages\Fields\FieldsPage.cs" />
+    <Compile Include="PageObjects\Test\TestApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SelectorFinderTests.cs" />
+    <Compile Include="Stubs\WebDriver\Null\NullDriver.cs" />
+    <Compile Include="Stubs\WebDriver\Null\NullNavigation.cs" />
+    <Compile Include="Stubs\WebDriver\Null\NullOptions.cs" />
+    <Compile Include="Stubs\WebDriver\Null\NullTargetLocator.cs" />
+    <Compile Include="Stubs\WebDriver\Null\NullWebElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Automation.PageObjects\Automation.PageObjects.csproj">
@@ -61,6 +83,19 @@
       <Project>{32bfe0a4-e471-4b9f-9118-c715d86ac94d}</Project>
       <Name>Turbo</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <EmbeddedResource Include="PageObjects\Google\GoogleSearchApp.yaml" />
+    <EmbeddedResource Include="PageObjects\Google\Pages\Search\SearchPage.yaml" />
+    <EmbeddedResource Include="PageObjects\Google\Pages\Search\Parts\Header\Header.yaml" />
+    <None Include="PageObjects\Google\Pages\Search\Parts\MetaNotEmbedded\MetaNotEmbedded.yaml" />
+    <EmbeddedResource Include="PageObjects\Test\TestApp.yaml" />
+    <EmbeddedResource Include="PageObjects\Test\Pages\Empty2\Empty2Page.yaml" />
+    <EmbeddedResource Include="PageObjects\Test\Pages\Fields\FieldsPage.yaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="PageObjects\Google\Parts\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

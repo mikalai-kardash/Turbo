@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using Turbo.Metadata;
 using Turbo.Metadata.Models;
 
@@ -50,10 +48,17 @@ namespace Turbo
             var appInfo = _apps[app.Type];
             appInfo.AddPage(page);
 
+            var elements = page.Meta?.Elements;
+            var finder = elements == null 
+                ? new NullSelectorFinder() as ISelectorFinder
+                : new SelectorFinder(elements);
+
+
             var pageInfo = new PageInfo
             {
                 App = app,
-                Page = page
+                Page = page,
+                Finder = finder
             };
 
             _pages.Add(page.Type, pageInfo);
@@ -67,45 +72,5 @@ namespace Turbo
             _parts.Add(part.Type, partInfo);
             return partInfo;
         }
-    }
-
-    public class AppInfo
-    {
-        private readonly IList<Metadata<Page>> _pages = new List<Metadata<Page>>();
-
-        public Metadata<Page>[] Pages => _pages.ToArray();
-
-        public Metadata<App> App { get; set; }
-
-        public void AddPage(Metadata<Page> page)
-        {
-            _pages.Add(page);
-        }
-    }
-
-    public class PageInfo
-    {
-        public Metadata<App> App { get; set; }
-        public Metadata<Page> Page { get; set; }
-
-        public string GetPageUrl()
-        {
-            return $"{App.Meta.Url}/{Page.Meta.Url}"
-                .Replace("//", "/");
-        }
-
-        public void AddField(FieldInfo field)
-        {
-        }
-
-        public void AddProperty(PropertyInfo property)
-        {
-
-        }
-    }
-
-    public class PartInfo
-    {
-        public Metadata<Part> Part { get; set; }
     }
 }

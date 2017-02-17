@@ -22,16 +22,17 @@ namespace Turbo
 
         public void SetWebElement(FieldInfo field)
         {
-            _currentPage.AddField(field);
+            var selector = _currentPage.Finder.GetSelector(field.Name);
+            _currentPage.Analysis.Assign(field, selector);
         }
 
         public void SetWebElement(PropertyInfo property)
         {
-            _currentPage.AddProperty(property);
         }
 
         public void SetWebDriver(FieldInfo field)
         {
+            _currentPage.Analysis.AssignWithWebDriver(field);
         }
 
         public void SetWebDriver(PropertyInfo property)
@@ -40,24 +41,24 @@ namespace Turbo
 
         public void SetPagePart(PropertyInfo property)
         {
-            TypeAnalyzer.Analyze(property.PropertyType, this);
         }
 
         public void SetPagePart(FieldInfo field)
         {
-            TypeAnalyzer.Analyze(field.FieldType, this);
         }
 
 
         public TPage Build<TPage>()
         {
             TurboSync.TryGetPage<TPage>(out _currentPage);
+            if (!_currentPage.Analysis.IsDone)
+            {
+                TypeAnalyzer.Analyze<TPage>(this);
+            }
 
-            TypeAnalyzer.Analyze<TPage>(this);
-
-
-
-            return _objectFactory.GetInstance<TPage>();
+            var page = _objectFactory.GetInstance<TPage>();
+            _currentPage.Analysis.Activate(page, _driver);
+            return page;
         }
     }
 }

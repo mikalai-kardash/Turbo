@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using OpenQA.Selenium;
 using Turbo.Metadata;
-using Turbo.Metadata.Models;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
 namespace Turbo
 {
     public class TurboFactory
     {
         private readonly TurboConfiguration _configuration;
+        private readonly IMetadataLoader _metadataLoader; // todo: candidate for configuration
 
         public TurboFactory(TurboConfiguration configuration)
         {
             _configuration = configuration;
+            _metadataLoader = new YamlMetadataLoader();
         }
 
         public TPage GetPage<TApp, TPage>(IWebDriver driver)
@@ -25,32 +22,21 @@ namespace Turbo
                 throw new ArgumentNullException(nameof(driver));
             }
 
-            AppInfo appInfo;
-            if (!TurboSync.TryGetApp<TApp>(out appInfo))
-            {
-                var appMeta = GetAppMeta<TApp>();
-                appInfo = TurboSync.AddApp(appMeta);
-            }
-
-            PageInfo pageInfo;
-            if (!TurboSync.TryGetPage<TPage>(out pageInfo))
-            {
-                var pageMeta = GetPageMeta<TPage>();
-                pageInfo = TurboSync.AddPage(appInfo.App, pageMeta);
-            }
+            var appInfo = GetAppInfo<TApp>();
+            var pageInfo = GetPageInfo<TPage>(appInfo);
 
             var pageBuilder = new PageBuilder(driver, _configuration.ObjectFactory);
 
             var pageUrl = pageInfo.GetPageUrl();
+            var browserUrl = driver.Url;
 
-            var actualUrl = driver.Url;
-            if (string.IsNullOrWhiteSpace(actualUrl))
+            if (string.IsNullOrWhiteSpace(browserUrl))
             {
                 pageBuilder.NavigateToPageFirst();
             }
             else
             {
-                var url = new Uri(actualUrl);
+                var url = new Uri(browserUrl);
                 if (!url.AbsolutePath.Equals(pageUrl, StringComparison.OrdinalIgnoreCase))
                 {
                     pageBuilder.NavigateToPageFirst();
@@ -60,45 +46,30 @@ namespace Turbo
             return pageBuilder.Build<TPage>();
         }
 
-        private static TMeta GetMetadata<TMeta, T>()
+        private PageInfo GetPageInfo<TPage>(AppInfo appInfo)
         {
-            var metadata = default(TMeta);
-
-            var type = typeof(T);
-            var assembly = type.Assembly;
-            var resource = $"{type.FullName}.yaml";
-
-            var resources = new HashSet<string>(assembly.GetManifestResourceNames());
-
-            if (resources.Contains(resource))
+            PageInfo pageInfo;
+            if (TurboSync.TryGetPage<TPage>(out pageInfo))
             {
-                var stream = assembly.GetManifestResourceStream(resource);
-                if (stream != null)
-                {
-                    using (var reader = new StreamReader(stream))
-                    {
-                        var deserializer = new DeserializerBuilder()
-                            .WithNamingConvention(new CamelCaseNamingConvention())
-                            .Build();
-
-                        metadata = deserializer.Deserialize<TMeta>(reader);
-                    }
-                }
+                return pageInfo;
             }
 
-            return metadata;
+            var pageMeta = _metadataLoader.GetPageMeta<TPage>();
+            pageInfo = TurboSync.AddPage(appInfo.App, pageMeta);
+            return pageInfo;
         }
 
-        private static AppMeta<T> GetAppMeta<T>()
+        private AppInfo GetAppInfo<TApp>()
         {
-            var meta = GetMetadata<App, T>();
-            return new AppMeta<T>(meta);
-        }
+            AppInfo appInfo;
+            if (TurboSync.TryGetApp<TApp>(out appInfo))
+            {
+                return appInfo;
+            }
 
-        private static PageMeta<T> GetPageMeta<T>()
-        {
-            var meta = GetMetadata<Page, T>();
-            return new PageMeta<T>(meta);
+            var appMeta = _metadataLoader.GetAppMeta<TApp>();
+            appInfo = TurboSync.AddApp(appMeta);
+            return appInfo;
         }
     }
 }
