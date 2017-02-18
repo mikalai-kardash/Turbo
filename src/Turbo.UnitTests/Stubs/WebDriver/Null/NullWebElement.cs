@@ -7,13 +7,22 @@ namespace Turbo.UnitTests.Stubs.WebDriver.Null
 {
     public class NullWebElement : IWebElement
     {
+        private ReadOnlyCollection<IWebElement> _findElementsExpectation;
+
         public IWebElement FindElement(By by)
         {
-            return new NullWebElement();
+            return new NullWebElement
+            {
+                CssSelector = by.ToString()
+            };
         }
 
         public ReadOnlyCollection<IWebElement> FindElements(By @by)
         {
+            if (_findElementsExpectation != null)
+            {
+                return _findElementsExpectation;
+            }
             return new List<IWebElement>().AsReadOnly();
         }
 
@@ -56,5 +65,12 @@ namespace Turbo.UnitTests.Stubs.WebDriver.Null
         public Size Size { get; }
 
         public bool Displayed { get; }
+
+        public string CssSelector { get; set; }
+
+        public void ExpectFindElements(IEnumerable<IWebElement> returns)
+        {
+            _findElementsExpectation = new List<IWebElement>(returns).AsReadOnly();
+        }
     }
 }

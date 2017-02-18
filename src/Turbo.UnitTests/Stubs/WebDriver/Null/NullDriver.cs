@@ -6,13 +6,20 @@ namespace Turbo.UnitTests.Stubs.WebDriver.Null
 {
     public class NullDriver : IWebDriver
     {
+        private ReadOnlyCollection<IWebElement> _findElementsExpectation;
+
         public IWebElement FindElement(By by)
         {
-            return new NullWebElement();
+            return new NullWebElement {CssSelector = by.ToString()};
         }
 
         public ReadOnlyCollection<IWebElement> FindElements(By by)
         {
+            if (_findElementsExpectation != null)
+            {
+                return _findElementsExpectation;
+            }
+
             return new List<IWebElement>().AsReadOnly();
         }
 
@@ -52,5 +59,10 @@ namespace Turbo.UnitTests.Stubs.WebDriver.Null
         public string CurrentWindowHandle { get; }
 
         public ReadOnlyCollection<string> WindowHandles { get; }
+
+        public void ExpectFindElements(IEnumerable<IWebElement> returns)
+        {
+            _findElementsExpectation = new List<IWebElement>(returns).AsReadOnly();
+        }
     }
 }

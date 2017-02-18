@@ -1,0 +1,5 @@
+﻿url: '/'
+
+elements: {
+	element: '.something'
+}

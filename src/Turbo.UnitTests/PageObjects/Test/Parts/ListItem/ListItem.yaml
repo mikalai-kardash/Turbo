@@ -1,0 +1,7 @@
+﻿selector: 'article.item'
+
+elements: {
+	title: 'header .title',
+	address: 'header .location',
+	image: '.media div.item'
+}

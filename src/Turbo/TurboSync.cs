@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Turbo.Construction;
 using Turbo.Metadata;
 using Turbo.Metadata.Models;
 
@@ -31,6 +32,11 @@ namespace Turbo
             return _pages.TryGetValue(page, out info);
         }
 
+        public static bool TryGetPart<TPart>(out PartInfo info)
+        {
+            return TryGetPart(typeof(TPart), out info);
+        }
+
         public static bool TryGetPart(Type part, out PartInfo info)
         {
             return _parts.TryGetValue(part, out info);
@@ -49,10 +55,7 @@ namespace Turbo
             appInfo.AddPage(page);
 
             var elements = page.Meta?.Elements;
-            var finder = elements == null 
-                ? new NullSelectorFinder() as ISelectorFinder
-                : new SelectorFinder(elements);
-
+            var finder = GetSelectorFinder(elements);
 
             var pageInfo = new PageInfo
             {
@@ -61,14 +64,34 @@ namespace Turbo
                 Finder = finder
             };
 
+            pageInfo.Analysis.Type = page.Type;
+
             _pages.Add(page.Type, pageInfo);
 
             return pageInfo;
         }
 
+        private static ISelectorFinder GetSelectorFinder(IDictionary<string, string> elements)
+        {
+            var finder = elements == null
+                ? new NullSelectorFinder() as ISelectorFinder
+                : new SelectorFinder(elements);
+            return finder;
+        }
+
         public static PartInfo AddPart(Metadata<Part> part)
         {
-            var partInfo = new PartInfo { Part = part };
+            var elements = part.Meta?.Elements;
+            var finder = GetSelectorFinder(elements);
+            var partInfo = new PartInfo
+            {
+                Part = part,
+                Finder = finder
+            };
+
+            partInfo.Analysis.RootCssSelector = part?.Meta?.Selector;
+            partInfo.Analysis.Type = part.Type;
+
             _parts.Add(part.Type, partInfo);
             return partInfo;
         }

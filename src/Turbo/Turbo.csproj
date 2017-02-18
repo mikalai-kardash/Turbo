@@ -49,8 +49,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Analysis.cs" />
+    <Compile Include="Construction\Analysis.cs" />
     <Compile Include="AppInfo.cs" />
+    <Compile Include="Construction\IPageAnalyzer.cs" />
+    <Compile Include="Construction\IPageBuilder.cs" />
+    <Compile Include="Construction\IPageFactory.cs" />
+    <Compile Include="Construction\PageAnalyzer.cs" />
+    <Compile Include="Construction\PartAnalyzer.cs" />
+    <Compile Include="Construction\Steps\AssignPart\AssignPart.cs" />
+    <Compile Include="Construction\Steps\AssignPart\AssignPartCollection.cs" />
+    <Compile Include="Construction\Steps\AssignPart\IAssignPart.cs" />
+    <Compile Include="Construction\Steps\Root\AssignRootElement.cs" />
+    <Compile Include="Construction\Steps\WebDriver\AssignWebDriver.cs" />
+    <Compile Include="Construction\Steps\FindElement\FindElement.cs" />
+    <Compile Include="Construction\Steps\Root\IAssignRootElement.cs" />
+    <Compile Include="Construction\Steps\FindElement\IFindElementWithWebDriver.cs" />
+    <Compile Include="Construction\Steps\FindElement\IFindElementWithWebElement.cs" />
+    <Compile Include="Construction\Steps\WebDriver\ISetWebDriver.cs" />
     <Compile Include="SelectorFinder.cs" />
     <Compile Include="Metadata\IMetadataLoader.cs" />
     <Compile Include="Metadata\AppMeta.cs" />
@@ -64,7 +79,7 @@
     <Compile Include="Metadata\Models\Part.cs" />
     <Compile Include="Metadata\PageMeta.cs" />
     <Compile Include="Metadata\PartMeta.cs" />
-    <Compile Include="PageBuilder.cs" />
+    <Compile Include="Construction\PageBuilder.cs" />
     <Compile Include="PageInfo.cs" />
     <Compile Include="PartInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -72,12 +87,13 @@
     <Compile Include="TurboFactory.cs" />
     <Compile Include="TurboInitializer.cs" />
     <Compile Include="TurboSync.cs" />
-    <Compile Include="TypeAnalyzer.cs" />
-    <Compile Include="YamlMetadataLoader.cs" />
+    <Compile Include="Construction\TypeAnalyzer.cs" />
+    <Compile Include="Metadata\Yaml\YamlMetadataLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

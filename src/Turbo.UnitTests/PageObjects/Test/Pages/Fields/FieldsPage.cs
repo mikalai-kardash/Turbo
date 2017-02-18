@@ -11,6 +11,9 @@ namespace Turbo.UnitTests.PageObjects.Test.Pages.Fields
         // locate and set element
         private IWebElement _element;
 
+        private readonly IWebDriver notInjected;
+        public readonly IWebDriver _notInjected;
+
         public IWebDriver GetBrowser()
         {
             return browser;
@@ -19,6 +22,11 @@ namespace Turbo.UnitTests.PageObjects.Test.Pages.Fields
         public IWebElement Get_element()
         {
             return _element;
+        }
+
+        public IWebDriver GetNotInjected()
+        {
+            return notInjected;
         }
     }
 }

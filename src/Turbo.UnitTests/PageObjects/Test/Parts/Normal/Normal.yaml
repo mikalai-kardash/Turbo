@@ -1,0 +1,5 @@
+﻿selector: '#id'
+
+elements: {
+	element: '.normal'
+}

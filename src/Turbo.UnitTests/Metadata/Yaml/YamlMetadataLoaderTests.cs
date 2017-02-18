@@ -1,11 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Turbo.Metadata.Yaml;
 using Turbo.UnitTests.PageObjects.Google;
 using Turbo.UnitTests.PageObjects.Google.Pages.Search;
 using Turbo.UnitTests.PageObjects.Google.Pages.Search.Parts.Header;
 using Turbo.UnitTests.PageObjects.Google.Pages.Search.Parts.MetaNotEmbedded;
 using Turbo.UnitTests.PageObjects.Google.Pages.Search.Parts.NoMeta;
 
-namespace Turbo.UnitTests.Metadata
+namespace Turbo.UnitTests.Metadata.Yaml
 {
     [TestClass]
     public class YamlMetadataLoaderTests

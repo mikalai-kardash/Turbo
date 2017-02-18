@@ -1,0 +1,5 @@
+﻿selector: '.simplePart'
+
+elements: {
+	element: '.byClass'
+}
