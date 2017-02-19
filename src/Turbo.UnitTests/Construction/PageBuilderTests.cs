@@ -1,5 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Turbo.Cache;
+using Turbo.Cache.Info;
 using Turbo.Construction;
+using Turbo.DI;
+using Turbo.Metadata;
 using Turbo.Metadata.Yaml;
 using Turbo.UnitTests.PageObjects.Test;
 using Turbo.UnitTests.PageObjects.Test.Pages.Empty;
@@ -26,7 +30,12 @@ namespace Turbo.UnitTests.Construction
         {
             _loader = new YamlMetadataLoader();
             _nullDriver = new NullDriver();
-            _pageBuilder = new PageBuilder(_nullDriver, new DefaultObjectFactory());
+
+            var factory = new DefaultObjectFactory();
+            TurboInitializer.RegisterBuiltInTypes(factory);
+            factory.RegisterInstance<IMetadataLoader>(_loader);
+
+            _pageBuilder = factory.GetInstance<IPageFactory>();
             
             var appInfo = RegisterApp<TestApp>();
 
@@ -66,21 +75,21 @@ namespace Turbo.UnitTests.Construction
         [TestMethod]
         public void Creates_empty_page()
         {
-            var page = _pageBuilder.Build<EmptyPage>();
+            var page = _pageBuilder.Build<EmptyPage>(_nullDriver);
             Assert.IsNotNull(page);
         }
 
         [TestMethod]
         public void Creates_empty2_page()
         {
-            var page = _pageBuilder.Build<Empty2Page>();
+            var page = _pageBuilder.Build<Empty2Page>(_nullDriver);
             Assert.IsNotNull(page);
         }
 
         [TestMethod]
         public void Creates_fields_page()
         {
-            var page = _pageBuilder.Build<FieldsPage>();
+            var page = _pageBuilder.Build<FieldsPage>(_nullDriver);
 
             Assert.IsNotNull(page.GetBrowser(), "browser");
             Assert.IsNotNull(page.Browser, "Browser");
@@ -93,7 +102,7 @@ namespace Turbo.UnitTests.Construction
         [TestMethod]
         public void Created_properties_page()
         {
-            var page = _pageBuilder.Build<PropertiesPage>();
+            var page = _pageBuilder.Build<PropertiesPage>(_nullDriver);
 
             Assert.IsNotNull(page.Browser, "Browser");
             Assert.IsNotNull(page.GetPrivateBrowser(), "PrivateBrowser");
@@ -109,10 +118,10 @@ namespace Turbo.UnitTests.Construction
         {
             _nullDriver.ExpectFindElements(new []
             {
-                new NullWebElement()
+                new NullElement()
             });
 
-            var page = _pageBuilder.Build<HasPartPage>();
+            var page = _pageBuilder.Build<HasPartPage>(_nullDriver);
 
             VerifySimple(page.Simple);
         }
@@ -120,15 +129,17 @@ namespace Turbo.UnitTests.Construction
         [TestMethod]
         public void Creates_normal_page()
         {
-            var normalElement = new NullWebElement();
+            var normalElement = new NullElement();
             _nullDriver.ExpectFindElements(new[]
             {
                 normalElement
             });
-
-            normalElement.ExpectFindElements(new [] { new NullWebElement() });
+            normalElement.ExpectFindElements(new []
+            {
+                new NullElement()
+            });
             
-            var page = _pageBuilder.Build<NormalPage>();
+            var page = _pageBuilder.Build<NormalPage>(_nullDriver);
 
             Assert.IsNotNull(page.GetElement());
 
@@ -145,12 +156,12 @@ namespace Turbo.UnitTests.Construction
         {
             _nullDriver.ExpectFindElements(new[]
             {
-                new NullWebElement(),
-                new NullWebElement(),
-                new NullWebElement(),
+                new NullElement(),
+                new NullElement(),
+                new NullElement(),
             });
 
-            var page = _pageBuilder.Build<SimpleListPage>();
+            var page = _pageBuilder.Build<SimpleListPage>(_nullDriver);
             Assert.IsNotNull(page.Items, "Items[]");
         }
 

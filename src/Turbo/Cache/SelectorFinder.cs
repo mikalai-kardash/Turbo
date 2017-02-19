@@ -2,21 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Turbo
+namespace Turbo.Cache
 {
-    public interface ISelectorFinder
-    {
-        string GetSelector(string fieldName);
-    }
-
-    public class NullSelectorFinder : ISelectorFinder
-    {
-        public string GetSelector(string fieldName)
-        {
-            return string.Empty;
-        }
-    }
-
     public class SelectorFinder : ISelectorFinder
     {
         private readonly IDictionary<string, string> _elements;

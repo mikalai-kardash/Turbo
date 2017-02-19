@@ -3,8 +3,8 @@ using Turbo.Cache.Info;
 
 namespace Turbo.Construction
 {
-    public interface IPageAnalyzer
+    public interface IPartAnalyzer
     {
-        PageInfo Analyze(Type pageType);
+        PartInfo Analyze(Type partType);
     }
 }

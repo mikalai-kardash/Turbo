@@ -2,7 +2,7 @@ using Turbo.Construction;
 using Turbo.Metadata;
 using Turbo.Metadata.Models;
 
-namespace Turbo
+namespace Turbo.Cache.Info
 {
     public class PageInfo
     {
@@ -18,7 +18,9 @@ namespace Turbo
 
         public string GetPageUrl()
         {
-            return $"{App.Meta.Url}/{Page.Meta.Url}".Replace("//", "/");
+            return 
+                $"{App.Meta.Url}/{Page.Meta.Url}"
+                .Replace("//", "/");
         }
     }
 }

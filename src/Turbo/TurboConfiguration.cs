@@ -1,21 +1,26 @@
 ﻿using System.Reflection;
+using Turbo.DI;
+using Turbo.Metadata;
+using Turbo.Metadata.Yaml;
 
 namespace Turbo
 {
     public class TurboConfiguration
     {
         public IObjectFactory ObjectFactory { get; set; }
-        public Assembly[] Assemblies { get; set; }
+        public Assembly[] PageObjects { get; set; }
+        public IMetadataLoader MetadataLoader { get; set; }
 
-        public static TurboConfiguration Default { get; } = new TurboConfiguration
+        public static TurboConfiguration Default => new TurboConfiguration
         {
-            Assemblies = new[]
+            PageObjects = new[]
             {
                 Assembly.GetExecutingAssembly(),
                 Assembly.GetCallingAssembly(),
                 Assembly.GetEntryAssembly()
             },
-            ObjectFactory = new DefaultObjectFactory()
+            ObjectFactory = new DefaultObjectFactory(),
+            MetadataLoader = new YamlMetadataLoader()
         };
     }
 }

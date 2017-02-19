@@ -3,11 +3,12 @@ using System.Linq;
 using Turbo.Metadata;
 using Turbo.Metadata.Models;
 
-namespace Turbo
+namespace Turbo.Cache.Info
 {
     public class AppInfo
     {
-        private readonly IList<Metadata<Page>> _pages = new List<Metadata<Page>>();
+        private readonly IList<Metadata<Page>> _pages
+            = new List<Metadata<Page>>();
 
         public Metadata<Page>[] Pages => _pages.ToArray();
 

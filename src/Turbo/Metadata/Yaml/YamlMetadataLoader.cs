@@ -7,7 +7,6 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace Turbo.Metadata.Yaml
 {
-    // todo: move to yaml specific assembly
     public class YamlMetadataLoader : IMetadataLoader
     {
         public AppMeta<T> GetAppMeta<T>()

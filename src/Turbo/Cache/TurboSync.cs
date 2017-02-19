@@ -1,16 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using Turbo.Construction;
+using Turbo.Cache.Info;
 using Turbo.Metadata;
 using Turbo.Metadata.Models;
 
-namespace Turbo
+namespace Turbo.Cache
 {
+    // todo: hide this behind some fence
     internal static class TurboSync
     {
-        private static readonly IDictionary<Type, AppInfo> _apps = new Dictionary<Type, AppInfo>();
-        private static readonly IDictionary<Type, PageInfo> _pages = new Dictionary<Type, PageInfo>();
-        private static readonly IDictionary<Type, PartInfo> _parts = new Dictionary<Type, PartInfo>();
+        private static readonly IDictionary<Type, AppInfo> Apps 
+            = new Dictionary<Type, AppInfo>();
+
+        private static readonly IDictionary<Type, PageInfo> Pages 
+            = new Dictionary<Type, PageInfo>();
+
+        private static readonly IDictionary<Type, PartInfo> Parts 
+            = new Dictionary<Type, PartInfo>();
+
+        #region TryGet
 
         public static bool TryGetApp<TApp>(out AppInfo info)
         {
@@ -19,7 +27,7 @@ namespace Turbo
 
         public static bool TryGetApp(Type app, out AppInfo info)
         {
-            return _apps.TryGetValue(app, out info);
+            return Apps.TryGetValue(app, out info);
         }
 
         public static bool TryGetPage<TPage>(out PageInfo info)
@@ -29,7 +37,7 @@ namespace Turbo
 
         public static bool TryGetPage(Type page, out PageInfo info)
         {
-            return _pages.TryGetValue(page, out info);
+            return Pages.TryGetValue(page, out info);
         }
 
         public static bool TryGetPart<TPart>(out PartInfo info)
@@ -39,19 +47,21 @@ namespace Turbo
 
         public static bool TryGetPart(Type part, out PartInfo info)
         {
-            return _parts.TryGetValue(part, out info);
+            return Parts.TryGetValue(part, out info);
         }
+
+        #endregion
 
         public static AppInfo AddApp(Metadata<App> app)
         {
             var info = new AppInfo {App = app};
-            _apps.Add(app.Type, info);
+            Apps.Add(app.Type, info);
             return info;
         }
 
         public static PageInfo AddPage(Metadata<App> app, Metadata<Page> page)
         {
-            var appInfo = _apps[app.Type];
+            var appInfo = Apps[app.Type];
             appInfo.AddPage(page);
 
             var elements = page.Meta?.Elements;
@@ -66,17 +76,9 @@ namespace Turbo
 
             pageInfo.Analysis.Type = page.Type;
 
-            _pages.Add(page.Type, pageInfo);
+            Pages.Add(page.Type, pageInfo);
 
             return pageInfo;
-        }
-
-        private static ISelectorFinder GetSelectorFinder(IDictionary<string, string> elements)
-        {
-            var finder = elements == null
-                ? new NullSelectorFinder() as ISelectorFinder
-                : new SelectorFinder(elements);
-            return finder;
         }
 
         public static PartInfo AddPart(Metadata<Part> part)
@@ -89,11 +91,20 @@ namespace Turbo
                 Finder = finder
             };
 
-            partInfo.Analysis.RootCssSelector = part?.Meta?.Selector;
+            partInfo.Analysis.RootSelector = part?.Meta?.Selector;
             partInfo.Analysis.Type = part.Type;
 
-            _parts.Add(part.Type, partInfo);
+            Parts.Add(part.Type, partInfo);
             return partInfo;
+        }
+
+        private static ISelectorFinder GetSelectorFinder(IDictionary<string, string> elements)
+        {
+            // todo: rework for DI
+            // todo: remove as it is runtime context
+            return elements == null
+                ? new NullSelectorFinder() as ISelectorFinder
+                : new SelectorFinder(elements);
         }
     }
 }

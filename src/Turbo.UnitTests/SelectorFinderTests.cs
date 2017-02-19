@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Turbo.Cache;
 
 namespace Turbo.UnitTests
 {

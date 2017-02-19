@@ -1,7 +1,10 @@
-﻿namespace Turbo.Construction
+﻿using OpenQA.Selenium;
+
+namespace Turbo.Construction
 {
     public interface IPageFactory
     {
-        TPage Build<TPage>();
+        TPage Build<TPage>(IWebDriver driver);
+        void NavigateToPageFirst();
     }
 }

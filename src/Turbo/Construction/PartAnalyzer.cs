@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Turbo.Metadata;
-using Turbo.Metadata.Yaml;
+using Turbo.Cache;
+using Turbo.Cache.Info;
+using Turbo.DI;
 
 namespace Turbo.Construction
 {
-    public class PartAnalyzer : IPageBuilder
+    public class PartAnalyzer : IPageBuilder, IPartAnalyzer
     {
-        private readonly PartInfo _parent;
-        private readonly IMetadataLoader _metadataLoader = new YamlMetadataLoader();
         private readonly IObjectFactory _objectFactory;
-        private readonly Type _partType;
+        private readonly IInfoProvider _infoProvider;
+
         private PartInfo _part;
 
         private static readonly HashSet<string> RootNames =
@@ -23,31 +23,19 @@ namespace Turbo.Construction
                 "_container"
             };
 
-        public PartAnalyzer(IObjectFactory objectFactory, Type partType)
+        public PartAnalyzer(IObjectFactory objectFactory, IInfoProvider infoProvider)
         {
             _objectFactory = objectFactory;
-            _partType = partType;
+            _infoProvider = infoProvider;
         }
 
-        private PartAnalyzer(IObjectFactory objectFactory, Type partType, PartInfo parent)
-            : this(objectFactory, partType)
+        public PartInfo Analyze(Type partType)
         {
-            _parent = parent;
-        }
-
-        public PartInfo Analyze()
-        {
-            _part = GetPartInfo(_partType);
+            _part = _infoProvider.GetPartInfo(partType);
 
             if (!_part.Analysis.IsDone)
             {
-                var rootSelector = _part.Part.Meta.Selector;
-                if (!string.IsNullOrWhiteSpace(rootSelector))
-                {
-                    _part.Analysis.AssignRootElement(rootSelector, _parent?.Analysis);
-                }
-
-                TypeAnalyzer.Analyze(_partType, this);
+                TypeAnalyzer.Analyze(partType, this);
             }
 
             return _part;
@@ -91,25 +79,14 @@ namespace Turbo.Construction
         public void SetPart(FieldInfo field)
         {
             var partType = field.FieldType;
-            var partInfo = new PartAnalyzer(_objectFactory, partType, _part).Analyze();
+            var partAnalyzer = _objectFactory.GetInstance<IPartAnalyzer>();
+            var partInfo = partAnalyzer.Analyze(partType);
 
             _part.Analysis.AssignPart(field, partInfo);
         }
 
         public void SetPartCollection(FieldInfo field)
         {
-            throw new NotImplementedException();
-        }
-
-        private PartInfo GetPartInfo(Type partType)
-        {
-            PartInfo partInfo;
-            if (!TurboSync.TryGetPart(partType, out partInfo))
-            {
-                var meta = _metadataLoader.GetPartMeta(partType);
-                partInfo = TurboSync.AddPart(meta);
-            }
-            return partInfo;
         }
     }
 }

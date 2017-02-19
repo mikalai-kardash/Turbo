@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Reflection;
+using Turbo.Cache;
+using Turbo.Cache.Info;
+using Turbo.DI;
 
 namespace Turbo.Construction
 {
-    public class PageAnalyzer<T> : IPageBuilder, IPageAnalyzer
+    public class PageAnalyzer : IPageBuilder, IPageAnalyzer
     {
         private readonly IObjectFactory _objectFactory;
-        private readonly PageInfo _page;
+        private readonly IInfoProvider _infoProvider;
 
-        public PageAnalyzer(IObjectFactory objectFactory)
+        private PageInfo _page;
+
+        public PageAnalyzer(IObjectFactory objectFactory, IInfoProvider infoProvider)
         {
             _objectFactory = objectFactory;
-            TurboSync.TryGetPage<T>(out _page);
+            _infoProvider = infoProvider;
         }
 
         public void SetWebElement(FieldInfo field)
@@ -40,7 +45,8 @@ namespace Turbo.Construction
         public void SetPart(FieldInfo field)
         {
             var partType = field.FieldType;
-            var partInfo = new PartAnalyzer(_objectFactory, partType).Analyze();
+            var analyzer = _objectFactory.GetInstance<IPartAnalyzer>();
+            var partInfo = analyzer.Analyze(partType);
 
             _page.Analysis.AssignPart(field, partInfo);
         }
@@ -48,26 +54,20 @@ namespace Turbo.Construction
         public void SetPartCollection(FieldInfo field)
         {
             var partType = field.FieldType.GetElementType();
-            var partInfo = new PartAnalyzer(_objectFactory, partType).Analyze();
+            var analyzer = _objectFactory.GetInstance<IPartAnalyzer>();
+            var partInfo = analyzer.Analyze(partType);
 
             _page.Analysis.AssignPartCollection(field, partInfo);
         }
 
-        public PageInfo Analyze()
+        public PageInfo Analyze(Type pageType)
         {
-            var pageInfo = GetPageInfo(typeof(T));
-            if (!pageInfo.Analysis.IsDone)
+            _page = _infoProvider.GetPageInfo(pageType);
+            if (!_page.Analysis.IsDone)
             {
-                TypeAnalyzer.Analyze<T>(this);
+                TypeAnalyzer.Analyze(pageType, this);
             }
-            return pageInfo;
-        }
-
-        private static PageInfo GetPageInfo(Type pageType)
-        {
-            PageInfo pageInfo;
-            TurboSync.TryGetPage(pageType, out pageInfo);
-            return pageInfo;
+            return _page;
         }
     }
 }

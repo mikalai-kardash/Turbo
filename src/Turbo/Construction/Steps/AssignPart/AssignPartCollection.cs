@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using OpenQA.Selenium;
+using Turbo.Cache.Info;
+using Turbo.Construction.Context;
 
 namespace Turbo.Construction.Steps.AssignPart
 {
@@ -17,24 +18,14 @@ namespace Turbo.Construction.Steps.AssignPart
             _partInfo = partInfo;
         }
 
-        public void Run(IWebDriver driver, object instance, Func<Type, object> createInstance)
+        public void Run(InstanceContext context)
         {
             var parts = _partInfo
                 .Analysis
-                .ActivateCollection(driver, null, createInstance)
+                .ActivateCollection(context.ToExecution())
                 .ToList();
 
-            SetValue(instance, parts);
-        }
-
-        public void Run(IWebDriver driver, IWebElement parent, object instance, Func<Type, object> createInstance)
-        {
-            var parts = _partInfo
-                .Analysis
-                .ActivateCollection(driver, parent, createInstance)
-                .ToList();
-
-            SetValue(instance, parts);
+            SetValue(context.Instance, parts);
         }
 
         private void SetValue(object instance, IReadOnlyList<object> part)
@@ -51,6 +42,7 @@ namespace Turbo.Construction.Steps.AssignPart
             {
                 array.SetValue(parts[i], i);
             }
+
             return array;
         }
     }

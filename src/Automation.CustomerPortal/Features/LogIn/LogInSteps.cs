@@ -10,10 +10,10 @@ namespace Automation.CustomerPortal.Features.LogIn
     public class LogInSteps
     {
         private readonly IWebDriver _browser;
-        private readonly TurboFactory _turbo;
+        private readonly ITurboFactory _turbo;
         private LogInPage _logInPage;
 
-        public LogInSteps(IWebDriver browser, TurboFactory turbo)
+        public LogInSteps(IWebDriver browser, ITurboFactory turbo)
         {
             _browser = browser;
             _turbo = turbo;

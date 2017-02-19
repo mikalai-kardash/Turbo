@@ -1,20 +1,20 @@
 ﻿using System;
 using OpenQA.Selenium;
+using Turbo.Cache;
 using Turbo.Construction;
-using Turbo.Metadata;
-using Turbo.Metadata.Yaml;
+using Turbo.DI;
 
 namespace Turbo
 {
-    public class TurboFactory
+    internal class TurboFactory : ITurboFactory
     {
-        private readonly TurboConfiguration _configuration;
-        private readonly IMetadataLoader _metadataLoader; // todo: candidate for configuration
+        private readonly IObjectFactory _objectFactory;
+        private readonly IInfoProvider _infoProvider;
 
-        public TurboFactory(TurboConfiguration configuration)
+        public TurboFactory(IObjectFactory objectFactory, IInfoProvider infoProvider)
         {
-            _configuration = configuration;
-            _metadataLoader = new YamlMetadataLoader();
+            _objectFactory = objectFactory;
+            _infoProvider = infoProvider;
         }
 
         public TPage GetPage<TApp, TPage>(IWebDriver driver)
@@ -24,54 +24,19 @@ namespace Turbo
                 throw new ArgumentNullException(nameof(driver));
             }
 
-            var appInfo = GetAppInfo<TApp>();
-            var pageInfo = GetPageInfo<TPage>(appInfo);
-
-            var pageBuilder = new PageBuilder(driver, _configuration.ObjectFactory);
+            var appInfo = _infoProvider.GetAppInfo<TApp>();
+            var pageInfo = _infoProvider.GetPageInfo<TPage>(appInfo);
 
             var pageUrl = pageInfo.GetPageUrl();
             var browserUrl = driver.Url;
 
-            if (string.IsNullOrWhiteSpace(browserUrl))
+            var pageBuilder = _objectFactory.GetInstance<IPageFactory>();
+            if (!pageUrl.Equals(browserUrl, StringComparison.OrdinalIgnoreCase))
             {
                 pageBuilder.NavigateToPageFirst();
             }
-            else
-            {
-                var url = new Uri(browserUrl);
-                if (!url.AbsolutePath.Equals(pageUrl, StringComparison.OrdinalIgnoreCase))
-                {
-                    pageBuilder.NavigateToPageFirst();
-                }
-            }
 
-            return pageBuilder.Build<TPage>();
-        }
-
-        private PageInfo GetPageInfo<TPage>(AppInfo appInfo)
-        {
-            PageInfo pageInfo;
-            if (TurboSync.TryGetPage<TPage>(out pageInfo))
-            {
-                return pageInfo;
-            }
-
-            var pageMeta = _metadataLoader.GetPageMeta<TPage>();
-            pageInfo = TurboSync.AddPage(appInfo.App, pageMeta);
-            return pageInfo;
-        }
-
-        private AppInfo GetAppInfo<TApp>()
-        {
-            AppInfo appInfo;
-            if (TurboSync.TryGetApp<TApp>(out appInfo))
-            {
-                return appInfo;
-            }
-
-            var appMeta = _metadataLoader.GetAppMeta<TApp>();
-            appInfo = TurboSync.AddApp(appMeta);
-            return appInfo;
+            return pageBuilder.Build<TPage>(driver);
         }
     }
 }

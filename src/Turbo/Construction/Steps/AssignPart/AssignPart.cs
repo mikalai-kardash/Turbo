@@ -1,6 +1,6 @@
-﻿using System;
-using System.Reflection;
-using OpenQA.Selenium;
+﻿using System.Reflection;
+using Turbo.Cache.Info;
+using Turbo.Construction.Context;
 
 namespace Turbo.Construction.Steps.AssignPart
 {
@@ -15,16 +15,10 @@ namespace Turbo.Construction.Steps.AssignPart
             _partInfo = partInfo;
         }
 
-        public void Run(IWebDriver driver, object instance, Func<Type, object> createInstance)
+        public void Run(InstanceContext context)
         {
-            var part = _partInfo.Analysis.Activate(driver, createInstance);
-            _field.SetValue(instance, part);
-        }
-
-        public void Run(IWebDriver driver, IWebElement parent, object instance, Func<Type, object> createInstance)
-        {
-            var part = _partInfo.Analysis.Activate(driver, parent, createInstance);
-            _field.SetValue(instance, part);
+            var part = _partInfo.Analysis.Activate(context.ToExecution());
+            _field.SetValue(context.Instance, part);
         }
     }
 }

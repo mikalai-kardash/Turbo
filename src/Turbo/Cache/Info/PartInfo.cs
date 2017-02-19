@@ -2,7 +2,7 @@
 using Turbo.Metadata;
 using Turbo.Metadata.Models;
 
-namespace Turbo
+namespace Turbo.Cache.Info
 {
     public class PartInfo
     {

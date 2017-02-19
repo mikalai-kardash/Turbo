@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using OpenQA.Selenium;
+using Turbo.Cache.Info;
+using Turbo.Construction.Context;
 using Turbo.Construction.Steps.AssignPart;
 using Turbo.Construction.Steps.FindElement;
 using Turbo.Construction.Steps.Root;
@@ -13,31 +14,30 @@ namespace Turbo.Construction
 {
     public class Analysis
     {
-        private readonly List<ISetWebDriver> _assignWebDriver 
+        private readonly List<ISetWebDriver> _setWebDriver
             = new List<ISetWebDriver>();
 
-        private readonly List<FindElement> _findElement 
+        private readonly List<FindElement> _findElement
             = new List<FindElement>();
 
-        private readonly List<IAssignRootElement> _assignRoot 
+        private readonly List<IAssignRootElement> _assignRoot
             = new List<IAssignRootElement>();
 
-        private readonly List<IAssignPart> _assignPart 
+        private readonly List<IAssignPart> _assignPart
             = new List<IAssignPart>();
 
-        private IWebElement _root;
+        public bool IsDone =>
+            _setWebDriver.Count > 0
+            || _findElement.Count > 0
+            || _assignRoot.Count > 0
+            || _assignPart.Count > 0;
 
-        public bool IsDone => _assignWebDriver.Count > 0
-                              || _findElement.Count > 0
-                              || _assignRoot.Count > 0
-                              || _assignPart.Count > 0;
-
-        public string RootCssSelector { get; set; }
+        public string RootSelector { get; set; }
         public Type Type { get; set; }
 
         public void AssignWithWebDriver(FieldInfo field)
         {
-            _assignWebDriver.Add(new AssignWebDriver(field));
+            _setWebDriver.Add(new SetWebDriver(field));
         }
 
         public void Assign(FieldInfo field, string selector)
@@ -80,59 +80,55 @@ namespace Turbo.Construction
             _assignPart.Add(new AssignPartCollection(field, partInfo));
         }
 
-        public void AssignRootElement(string selector, Analysis parent)
+        public object Activate(ExecutionContext context)
         {
+            return ActivateCollection(context).FirstOrDefault();
         }
 
-        public object Activate(IWebDriver driver, IWebElement parent, Func<Type, object> createInstance)
+        public IEnumerable<object> ActivateCollection(ExecutionContext executionContext)
         {
-            return ActivateCollection(driver, parent, createInstance).FirstOrDefault();
-        }
-
-        public object Activate(IWebDriver driver, Func<Type, object> createInstance)
-        {
-            return ActivateCollection(driver, null, createInstance).FirstOrDefault();
-        }
-
-        public IEnumerable<object> ActivateCollection(IWebDriver driver, IWebElement parent, Func<Type, object> createInstance)
-        {
-            if (string.IsNullOrWhiteSpace(RootCssSelector))
+            if (string.IsNullOrWhiteSpace(RootSelector))
             {
-                var instance = createInstance(Type);
+                var instanceContext = executionContext.ToInstance(Type);
+                yield return GetInstance(instanceContext);
+                yield break;
+            }
 
-                AssignWebDriversForObject(driver, instance);
-                FindAllElements(driver, instance);
-                AssignParts(driver, createInstance, instance);
+            // todo: figure out if to switch to ISearchContext
+            var searchContext = (ISearchContext) executionContext.Parent ?? executionContext.Driver;
+            var roots = GetAllRootElements(searchContext);
 
-                yield return instance;
+            foreach (var root in roots)
+            {
+                var instanceContext = executionContext.ToInstance(Type, root);
+                yield return GetInstance(instanceContext);
+            }
+        }
+
+        private object GetInstance(InstanceContext context)
+        {
+            AssignWebDriversForObject(context.Driver, context.Instance);
+
+            if (context.Root == null)
+            {
+                FindAllElements(context.Driver, context.Instance);
             }
             else
             {
-                var rootElements = GetAllRootElements(driver, parent);
-
-                foreach (var root in rootElements)
-                {
-                    var instance = createInstance(Type);
-
-                    AssignWebDriversForObject(driver, instance);
-                    AssignRootElementForObject(root, instance);
-                    FindAllElements(root, instance);
-
-                    foreach (var assignPart in _assignPart)
-                    {
-                        assignPart.Run(driver, root, instance, createInstance);
-                    }
-
-                    yield return instance;
-                }
+                AssignRootElementForObject(context.Root, context.Instance);
+                FindAllElements(context.Root, context.Instance);
             }
+            
+            AssignParts(context);
+
+            return context.Instance;
         }
 
-        private void AssignParts(IWebDriver driver, Func<Type, object> createInstance, object instance)
+        private void AssignParts(InstanceContext context)
         {
             foreach (var assignPart in _assignPart)
             {
-                assignPart.Run(driver, instance, createInstance);
+                assignPart.Run(context);
             }
         }
 
@@ -152,13 +148,10 @@ namespace Turbo.Construction
             }
         }
 
-        private IEnumerable<IWebElement> GetAllRootElements(IWebDriver driver, IWebElement parent)
+        private IEnumerable<IWebElement> GetAllRootElements(ISearchContext searchContext)
         {
-            var by = By.CssSelector(RootCssSelector);
-
-            return parent != null 
-                ? parent.FindElements(by) 
-                : driver.FindElements(by);
+            var by = By.CssSelector(RootSelector);
+            return searchContext.FindElements(by);
         }
 
         private void FindAllElements(IWebDriver driver, object instance)
@@ -171,7 +164,7 @@ namespace Turbo.Construction
 
         private void AssignWebDriversForObject(IWebDriver driver, object instance)
         {
-            foreach (var step in _assignWebDriver)
+            foreach (var step in _setWebDriver)
             {
                 step.Run(driver, instance);
             }

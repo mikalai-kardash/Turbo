@@ -55,6 +55,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="DI\DefaultObjectFactoryTests.cs" />
+    <Compile Include="DI\Stubs\ComplexService.cs" />
+    <Compile Include="DI\Stubs\IComplexService.cs" />
+    <Compile Include="DI\Stubs\ISimpleService.cs" />
+    <Compile Include="DI\Stubs\SimpleService.cs" />
     <Compile Include="Metadata\Yaml\YamlMetadataLoaderTests.cs" />
     <Compile Include="Construction\PageBuilderTests.cs" />
     <Compile Include="PageObjects\Google\GoogleSearchApp.cs" />
@@ -80,7 +85,7 @@
     <Compile Include="Stubs\WebDriver\Null\NullNavigation.cs" />
     <Compile Include="Stubs\WebDriver\Null\NullOptions.cs" />
     <Compile Include="Stubs\WebDriver\Null\NullTargetLocator.cs" />
-    <Compile Include="Stubs\WebDriver\Null\NullWebElement.cs" />
+    <Compile Include="Stubs\WebDriver\Null\NullElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Automation.PageObjects\Automation.PageObjects.csproj">

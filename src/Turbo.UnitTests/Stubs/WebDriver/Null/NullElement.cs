@@ -1,29 +1,48 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Linq;
 using OpenQA.Selenium;
 
 namespace Turbo.UnitTests.Stubs.WebDriver.Null
 {
-    public class NullWebElement : IWebElement
+    public class NullElement : IWebElement
     {
-        private ReadOnlyCollection<IWebElement> _findElementsExpectation;
+        private ReadOnlyCollection<NullElement> _findElementsExpectation;
 
         public IWebElement FindElement(By by)
         {
-            return new NullWebElement
+            return new NullElement
             {
-                CssSelector = by.ToString()
+                FoundBy = by,
+                Parent = this
             };
         }
 
-        public ReadOnlyCollection<IWebElement> FindElements(By @by)
+        public ReadOnlyCollection<IWebElement> FindElements(By by)
         {
-            if (_findElementsExpectation != null)
+            if (_findElementsExpectation == null)
             {
-                return _findElementsExpectation;
+                return new List<IWebElement>().AsReadOnly();
             }
-            return new List<IWebElement>().AsReadOnly();
+
+            foreach (var element in _findElementsExpectation)
+            {
+                element.FoundBy = by;
+                element.Parent = this;
+            }
+
+            return _findElementsExpectation
+                .Select(e => e as IWebElement)
+                .ToList()
+                .AsReadOnly();
+        }
+
+        public IWebElement Parent { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Parent} >> {FoundBy}";
         }
 
         public void Clear()
@@ -66,11 +85,11 @@ namespace Turbo.UnitTests.Stubs.WebDriver.Null
 
         public bool Displayed { get; }
 
-        public string CssSelector { get; set; }
+        public By FoundBy { get; set; }
 
-        public void ExpectFindElements(IEnumerable<IWebElement> returns)
+        public void ExpectFindElements(IEnumerable<NullElement> returns)
         {
-            _findElementsExpectation = new List<IWebElement>(returns).AsReadOnly();
+            _findElementsExpectation = new List<NullElement>(returns).AsReadOnly();
         }
     }
 }
