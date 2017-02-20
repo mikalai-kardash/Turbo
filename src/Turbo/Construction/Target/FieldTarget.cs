@@ -14,6 +14,8 @@ namespace Turbo.Construction.Target
 
         public string Name => _field.Name;
         public Type TargetType => _field.FieldType;
+        public bool IsArray => _field.FieldType.IsArray;
+        public bool IsClass => _field.FieldType.IsClass;
 
         public void SetValue(object instance, object value)
         {

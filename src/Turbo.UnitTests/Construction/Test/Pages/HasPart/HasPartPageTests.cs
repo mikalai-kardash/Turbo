@@ -40,6 +40,9 @@ namespace Turbo.UnitTests.Construction.Test.Pages.HasPart
             // Field - Element
             Assert.IsNotNull(simple.GetElement(), "element");
 
+            // Field - Element[]
+            Assert.IsNotNull(simple.GetLinks(), "links");
+
             // Property - WebDriver
             Assert.IsNotNull(simple.Browser, "Browser (property)");
 

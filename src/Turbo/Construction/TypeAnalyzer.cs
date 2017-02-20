@@ -12,11 +12,6 @@ namespace Turbo.Construction
                                          BindingFlags.NonPublic |
                                          BindingFlags.Public;
 
-        public static void Analyze<T>(IPageBuilder builder)
-        {
-            Analyze(typeof(T), builder);
-        }
-
         public static void Analyze(Type t, IPageBuilder builder)
         {
             Fields(builder, t);
@@ -33,30 +28,13 @@ namespace Turbo.Construction
                 {
                     continue;
                 }
-                
-                if (property.PropertyType == typeof(IWebElement))
+
+                if (property.IsDefined(typeof(CompilerGeneratedAttribute), false))
                 {
-                    builder.SetWebElement(property.ToTarget());
                     continue;
                 }
 
-                if (property.PropertyType.IsClass)
-                {
-                    if (property.PropertyType.IsArray)
-                    {
-                        if (property.PropertyType.GetElementType() == typeof(IWebElement))
-                        {
-                            builder.SetWebElementCollection(property.ToTarget());
-                            continue;
-                        }
-
-                        builder.SetPartCollection(property.ToTarget());
-                        continue;
-                    }
-
-                    builder.SetPart(property.ToTarget());
-                    continue;
-                }
+                AnalyzeTarget(builder, property.ToTarget());
             }
         }
 
@@ -73,41 +51,47 @@ namespace Turbo.Construction
                     continue;
                 }
 
-                if (field.FieldType == typeof(IWebDriver))
+                if (field.IsDefined(typeof(CompilerGeneratedAttribute), false))
                 {
-                    builder.SetWebDriver(field.ToTarget());
                     continue;
                 }
 
-                if (field.FieldType == typeof(IWebElement))
-                {
-                    // Compiler Generated baking fields receive "special"
-                    // names and cannot be so easily used to find selectors later.
-                    if (!field.IsDefined(typeof(CompilerGeneratedAttribute), false))
-                    {
-                        builder.SetWebElement(field.ToTarget());
-                    }
-                    continue;
-                }
-
-                if (field.FieldType.IsClass)
-                {
-                    if (field.FieldType.IsArray)
-                    {
-                        if (field.FieldType.GetElementType() == typeof(IWebElement))
-                        {
-                            builder.SetWebElementCollection(field.ToTarget());
-                            continue;
-                        }
-
-                        builder.SetPartCollection(field.ToTarget());
-                        continue;
-                    }
-
-                    builder.SetPart(field.ToTarget());
-                    continue;
-                }
+                AnalyzeTarget(builder, field.ToTarget());
             }
+        }
+
+        private static void AnalyzeTarget(IPageBuilder builder, ITarget target)
+        {
+            if (target.TargetType == typeof(IWebDriver))
+            {
+                builder.SetWebDriver(target);
+                return;
+            }
+
+            if (target.TargetType == typeof(IWebElement))
+            {
+                builder.SetWebElement(target);
+                return;
+            }
+
+            if (!target.IsClass)
+            {
+                return;
+            }
+
+            if (target.IsArray)
+            {
+                if (target.GetTypeOfArray() == typeof(IWebElement))
+                {
+                    builder.SetWebElementCollection(target);
+                    return;
+                }
+
+                builder.SetPartCollection(target);
+                return;
+            }
+
+            builder.SetPart(target);
         }
     }
 }

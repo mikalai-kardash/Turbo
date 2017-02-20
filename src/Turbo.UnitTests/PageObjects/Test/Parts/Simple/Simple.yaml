@@ -1,5 +1,6 @@
 ﻿selector: '.simplePart'
 
 elements: {
-	element: '.byClass'
+	element: '.byClass',
+	links: 'a'
 }

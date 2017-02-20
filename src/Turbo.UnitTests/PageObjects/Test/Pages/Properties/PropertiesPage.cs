@@ -8,6 +8,7 @@ namespace Turbo.UnitTests.PageObjects.Test.Pages.Properties
         private IWebDriver PrivateBrowser { get; set; }
         public IWebDriver ReadOnlyBrowser { get; }
 
+        public IWebElement[] Links { get; set; }
 
         private IWebElement element { get; set; }
         public IWebElement Element { get; set; }

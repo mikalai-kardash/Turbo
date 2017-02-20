@@ -26,6 +26,8 @@ namespace Turbo.UnitTests.Construction.Test.Pages.Properties
             Assert.IsNotNull(page.Element, "Element");
             Assert.IsNotNull(page.GetElement(), "(private) Element");
             Assert.IsNull(page._Element, "ReadOnlyElement");
+
+            Assert.IsNotNull(page.Links, "Links");
         }
     }
 }

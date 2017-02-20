@@ -58,6 +58,17 @@ namespace Turbo.UnitTests.PageObjects.Test.Parts.Simple
 
         #endregion
 
+        #region Field - Element[]
+
+        private IWebElement[] links;
+
+        public IWebElement[] GetLinks()
+        {
+            return links;
+        }
+
+        #endregion
+
         #region Property - WebDriver
 
         public IWebDriver Browser { get; set; }

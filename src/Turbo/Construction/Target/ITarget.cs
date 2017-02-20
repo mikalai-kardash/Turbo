@@ -6,9 +6,10 @@ namespace Turbo.Construction.Target
     {
         string Name { get; }
         Type TargetType { get; }
+        bool IsArray { get; }
+        bool IsClass { get; }
 
         void SetValue(object instance, object value);
-
         Type GetTypeOfArray();
         Type GetTargetClass();
     }
