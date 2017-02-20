@@ -6,39 +6,9 @@ using OpenQA.Selenium;
 
 namespace Turbo.UnitTests.Stubs.WebDriver.Null
 {
-    public class NullElement : IWebElement
+    public class NullElement : Expectable, IWebElement
     {
-        private ReadOnlyCollection<NullElement> _findElementsExpectation;
-
-        public IWebElement FindElement(By by)
-        {
-            return new NullElement
-            {
-                FoundBy = by,
-                Parent = this
-            };
-        }
-
-        public ReadOnlyCollection<IWebElement> FindElements(By by)
-        {
-            if (_findElementsExpectation == null)
-            {
-                return new List<IWebElement>().AsReadOnly();
-            }
-
-            foreach (var element in _findElementsExpectation)
-            {
-                element.FoundBy = by;
-                element.Parent = this;
-            }
-
-            return _findElementsExpectation
-                .Select(e => e as IWebElement)
-                .ToList()
-                .AsReadOnly();
-        }
-
-        public IWebElement Parent { get; set; }
+        public ISearchContext Parent { get; set; }
 
         public override string ToString()
         {
@@ -89,7 +59,6 @@ namespace Turbo.UnitTests.Stubs.WebDriver.Null
 
         public void ExpectFindElements(IEnumerable<NullElement> returns)
         {
-            _findElementsExpectation = new List<NullElement>(returns).AsReadOnly();
         }
     }
 }

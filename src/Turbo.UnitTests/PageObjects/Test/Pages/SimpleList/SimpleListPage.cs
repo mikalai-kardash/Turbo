@@ -1,4 +1,4 @@
-﻿using Turbo.UnitTests.PageObjects.Test.Parts.ListItem;
+﻿using Turbo.UnitTests.PageObjects.Test.Pages.SimpleList.Parts.ListItem;
 
 namespace Turbo.UnitTests.PageObjects.Test.Pages.SimpleList
 {

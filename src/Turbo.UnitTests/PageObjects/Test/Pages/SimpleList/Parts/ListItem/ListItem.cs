@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium;
 
-namespace Turbo.UnitTests.PageObjects.Test.Parts.ListItem
+namespace Turbo.UnitTests.PageObjects.Test.Pages.SimpleList.Parts.ListItem
 {
     public class ListItem
     {

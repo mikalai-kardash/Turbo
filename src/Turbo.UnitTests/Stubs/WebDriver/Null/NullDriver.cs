@@ -1,40 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using OpenQA.Selenium;
 
 namespace Turbo.UnitTests.Stubs.WebDriver.Null
 {
-    public class NullDriver : IWebDriver
+    public class NullDriver : Expectable, IWebDriver
     {
-        private ReadOnlyCollection<NullElement> _findElementsExpectation;
-
-        public IWebElement FindElement(By by)
-        {
-            return new NullElement
-            {
-                FoundBy = by
-            };
-        }
-
-        public ReadOnlyCollection<IWebElement> FindElements(By by)
-        {
-            if (_findElementsExpectation == null)
-            {
-                return new List<IWebElement>().AsReadOnly();
-            }
-
-            foreach (var element in _findElementsExpectation)
-            {
-                element.FoundBy = by;
-            }
-
-            return _findElementsExpectation
-                .Select(e => e as IWebElement)
-                .ToList()
-                .AsReadOnly();
-        }
-
         public void Dispose()
         {
         }
@@ -74,7 +45,6 @@ namespace Turbo.UnitTests.Stubs.WebDriver.Null
 
         public void ExpectFindElements(IEnumerable<NullElement> returns)
         {
-            _findElementsExpectation = new List<NullElement>(returns).AsReadOnly();
         }
     }
 }

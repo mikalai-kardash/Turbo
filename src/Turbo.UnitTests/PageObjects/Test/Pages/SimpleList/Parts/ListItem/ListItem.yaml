@@ -1,4 +1,4 @@
-﻿selector: 'article.item'
+selector: 'article.item'
 
 elements: {
 	title: 'header .title',

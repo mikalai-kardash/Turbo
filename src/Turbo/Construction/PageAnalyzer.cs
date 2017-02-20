@@ -19,6 +19,16 @@ namespace Turbo.Construction
             _infoProvider = infoProvider;
         }
 
+        public PageInfo Analyze(Type pageType)
+        {
+            _page = _infoProvider.GetPageInfo(pageType);
+            if (!_page.Analysis.IsDone)
+            {
+                TypeAnalyzer.Analyze(pageType, this);
+            }
+            return _page;
+        }
+
         public void SetWebElement(FieldInfo field)
         {
             var fieldName = field.Name;
@@ -58,16 +68,6 @@ namespace Turbo.Construction
             var partInfo = analyzer.Analyze(partType);
 
             _page.Analysis.AssignPartCollection(field, partInfo);
-        }
-
-        public PageInfo Analyze(Type pageType)
-        {
-            _page = _infoProvider.GetPageInfo(pageType);
-            if (!_page.Analysis.IsDone)
-            {
-                TypeAnalyzer.Analyze(pageType, this);
-            }
-            return _page;
         }
     }
 }

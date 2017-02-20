@@ -1,0 +1,7 @@
+﻿selector: '.widget'
+
+elements: {
+	title: 'h3',
+	description: 'p',
+	image: 'div.image'
+}

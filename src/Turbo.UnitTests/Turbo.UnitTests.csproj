@@ -55,13 +55,20 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Construction\Test\Pages\Empty2\Empty2PageTests.cs" />
+    <Compile Include="Construction\Test\Pages\Empty\EmptyPageTests.cs" />
+    <Compile Include="Construction\Test\Pages\Fields\FieldsPageTests.cs" />
+    <Compile Include="Construction\Test\Pages\HasPart\HasPartPageTests.cs" />
+    <Compile Include="Construction\Test\Pages\Normal\NormalPageTests.cs" />
+    <Compile Include="Construction\Test\Pages\PageTestBase.cs" />
+    <Compile Include="Construction\Test\Pages\Properties\PropertiesPageTests.cs" />
+    <Compile Include="Construction\Test\Pages\SimpleList\SimpleListPageTests.cs" />
     <Compile Include="DI\DefaultObjectFactoryTests.cs" />
     <Compile Include="DI\Stubs\ComplexService.cs" />
     <Compile Include="DI\Stubs\IComplexService.cs" />
     <Compile Include="DI\Stubs\ISimpleService.cs" />
     <Compile Include="DI\Stubs\SimpleService.cs" />
     <Compile Include="Metadata\Yaml\YamlMetadataLoaderTests.cs" />
-    <Compile Include="Construction\PageBuilderTests.cs" />
     <Compile Include="PageObjects\Google\GoogleSearchApp.cs" />
     <Compile Include="PageObjects\Google\Pages\Search\Parts\Header\Header.cs" />
     <Compile Include="PageObjects\Google\Pages\Search\Parts\MetaNotEmbedded\MetaNotEmbedded.cs" />
@@ -71,16 +78,21 @@
     <Compile Include="PageObjects\Test\Pages\Empty\EmptyPage.cs" />
     <Compile Include="PageObjects\Test\Pages\Fields\FieldsPage.cs" />
     <Compile Include="PageObjects\Test\Pages\HasPart\HasPartPage.cs" />
+    <Compile Include="PageObjects\Test\Pages\NormalList\NormalListPage.cs" />
+    <Compile Include="Construction\Test\Pages\NormalList\NormalListPageTests.cs" />
+    <Compile Include="PageObjects\Test\Pages\NormalList\Parts\ContainerItem\ContainerItem.cs" />
+    <Compile Include="PageObjects\Test\Pages\NormalList\Parts\Container\Container.cs" />
     <Compile Include="PageObjects\Test\Pages\Normal\NormalPage.cs" />
     <Compile Include="PageObjects\Test\Pages\Properties\PropertiesPage.cs" />
     <Compile Include="PageObjects\Test\Pages\SimpleList\SimpleListPage.cs" />
-    <Compile Include="PageObjects\Test\Parts\ListItem\ListItem.cs" />
-    <Compile Include="PageObjects\Test\Parts\Normal\Normal.cs" />
+    <Compile Include="PageObjects\Test\Pages\SimpleList\Parts\ListItem\ListItem.cs" />
+    <Compile Include="PageObjects\Test\Pages\Normal\Parts\Normal\Normal.cs" />
     <Compile Include="PageObjects\Test\Parts\Simple\Simple.cs" />
     <Compile Include="PageObjects\Test\TestApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelectorFinderTests.cs" />
-    <Compile Include="Stubs\WebDriver\Extentions.cs" />
+    <Compile Include="Stubs\WebDriver\Null\Expectable.cs" />
+    <Compile Include="Stubs\WebDriver\Null\Expectations.cs" />
     <Compile Include="Stubs\WebDriver\Null\NullDriver.cs" />
     <Compile Include="Stubs\WebDriver\Null\NullNavigation.cs" />
     <Compile Include="Stubs\WebDriver\Null\NullOptions.cs" />
@@ -109,10 +121,13 @@
     <EmbeddedResource Include="PageObjects\Test\Pages\Properties\PropertiesPage.yaml" />
     <EmbeddedResource Include="PageObjects\Test\Pages\HasPart\HasPartPage.yaml" />
     <EmbeddedResource Include="PageObjects\Test\Parts\Simple\Simple.yaml" />
-    <EmbeddedResource Include="PageObjects\Test\Parts\Normal\Normal.yaml" />
+    <EmbeddedResource Include="PageObjects\Test\Pages\Normal\Parts\Normal\Normal.yaml" />
     <EmbeddedResource Include="PageObjects\Test\Pages\Normal\NormalPage.yaml" />
-    <EmbeddedResource Include="PageObjects\Test\Parts\ListItem\ListItem.yaml" />
+    <EmbeddedResource Include="PageObjects\Test\Pages\SimpleList\Parts\ListItem\ListItem.yaml" />
     <EmbeddedResource Include="PageObjects\Test\Pages\SimpleList\SimpleListPage.yaml" />
+    <EmbeddedResource Include="PageObjects\Test\Pages\NormalList\NormalListPage.yaml" />
+    <EmbeddedResource Include="PageObjects\Test\Pages\NormalList\Parts\Container\Container.yaml" />
+    <EmbeddedResource Include="PageObjects\Test\Pages\NormalList\Parts\ContainerItem\ContainerItem.yaml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="PageObjects\Google\Parts\" />

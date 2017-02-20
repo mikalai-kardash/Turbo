@@ -32,12 +32,10 @@ namespace Turbo.Construction
         public PartInfo Analyze(Type partType)
         {
             _part = _infoProvider.GetPartInfo(partType);
-
             if (!_part.Analysis.IsDone)
             {
                 TypeAnalyzer.Analyze(partType, this);
             }
-
             return _part;
         }
 
@@ -87,6 +85,11 @@ namespace Turbo.Construction
 
         public void SetPartCollection(FieldInfo field)
         {
+            var partType = field.FieldType.GetElementType();
+            var analyzer = _objectFactory.GetInstance<IPartAnalyzer>();
+            var partInfo = analyzer.Analyze(partType);
+
+            _part.Analysis.AssignPartCollection(field, partInfo);
         }
     }
 }
