@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Turbo.Cache.Info;
 using Turbo.Construction.Context;
+using Turbo.Construction.Target;
 
 namespace Turbo.Construction.Steps.AssignPart
 {
     public class AssignPartCollection : IAssignPart
     {
-        private readonly FieldInfo _field;
         private readonly PartInfo _partInfo;
+        private readonly ITarget _target;
 
-        public AssignPartCollection(FieldInfo field, PartInfo partInfo)
+        public AssignPartCollection(ITarget target, PartInfo partInfo)
         {
-            _field = field;
+            _target = target;
             _partInfo = partInfo;
         }
 
@@ -25,17 +25,12 @@ namespace Turbo.Construction.Steps.AssignPart
                 .ActivateCollection(context.ToExecution())
                 .ToList();
 
-            SetValue(context.Instance, parts);
-        }
-
-        private void SetValue(object instance, IReadOnlyList<object> part)
-        {
-            _field.SetValue(instance, ToArray(part));
+            _target.SetValue(context.Instance, ToArray(parts));
         }
 
         private Array ToArray(IReadOnlyList<object> parts)
         {
-            var partsType = _field.FieldType.GetElementType();
+            var partsType = _target.GetTypeOfArray();
             var array = Array.CreateInstance(partsType, parts.Count);
 
             for (var i = 0; i < parts.Count; i++)

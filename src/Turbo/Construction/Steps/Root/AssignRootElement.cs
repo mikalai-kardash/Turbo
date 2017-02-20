@@ -1,33 +1,20 @@
-﻿using System.Reflection;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
+using Turbo.Construction.Target;
 
 namespace Turbo.Construction.Steps.Root
 {
     public class AssignRootElement : IAssignRootElement
     {
-        private readonly PropertyInfo _property;
-        private readonly FieldInfo _field;
+        private readonly ITarget _target;
 
-        public AssignRootElement(FieldInfo field)
+        public AssignRootElement(ITarget target)
         {
-            _field = field;
-        }
-
-        public AssignRootElement(PropertyInfo property)
-        {
-            _property = property;
+            _target = target;
         }
 
         public void Run(IWebElement root, object instance)
         {
-            if (_field != null)
-            {
-                _field.SetValue(instance, root);
-            }
-            else
-            {
-                _property.SetValue(instance, root);
-            }
+            _target.SetValue(instance, root);
         }
     }
 }

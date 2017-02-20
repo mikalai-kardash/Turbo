@@ -1,20 +1,20 @@
-﻿using System.Reflection;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
+using Turbo.Construction.Target;
 
 namespace Turbo.Construction.Steps.WebDriver
 {
     public class SetWebDriver : ISetWebDriver
     {
-        private readonly FieldInfo _field;
+        private readonly ITarget _target;
 
-        public SetWebDriver(FieldInfo field)
+        public SetWebDriver(ITarget target)
         {
-            _field = field;
+            _target = target;
         }
 
         public void Run(IWebDriver driver, object instance)
         {
-            _field.SetValue(instance, driver);
+            _target.SetValue(instance, driver);
         }
     }
 }

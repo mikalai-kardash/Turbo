@@ -1,14 +1,15 @@
-﻿using System.Reflection;
+﻿using Turbo.Construction.Target;
 
 namespace Turbo.Construction
 {
     public interface IPageBuilder
     {
-        void SetWebElement(FieldInfo field);
-        void SetWebElement(PropertyInfo property);
-        void SetWebDriver(FieldInfo field);
-        void SetPart(PropertyInfo property);
-        void SetPart(FieldInfo field);
-        void SetPartCollection(FieldInfo field);
+        void SetWebDriver(ITarget target);
+
+        void SetWebElement(ITarget target);
+        void SetWebElementCollection(ITarget target);
+
+        void SetPart(ITarget target);
+        void SetPartCollection(ITarget target);
     }
 }

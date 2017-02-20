@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Turbo.Cache;
 using Turbo.Cache.Info;
+using Turbo.Construction.Target;
 using Turbo.DI;
 
 namespace Turbo.Construction
 {
-    public class PartAnalyzer : IPageBuilder, IPartAnalyzer
+    public class PartAnalyzer : BaseAnalyzer, IPartAnalyzer
     {
-        private readonly IObjectFactory _objectFactory;
-        private readonly IInfoProvider _infoProvider;
-
-        private PartInfo _part;
-
         private static readonly HashSet<string> RootNames =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase)
             {
@@ -23,9 +18,13 @@ namespace Turbo.Construction
                 "_container"
             };
 
+        private readonly IInfoProvider _infoProvider;
+
+        private PartInfo _part;
+
         public PartAnalyzer(IObjectFactory objectFactory, IInfoProvider infoProvider)
+            : base(objectFactory)
         {
-            _objectFactory = objectFactory;
             _infoProvider = infoProvider;
         }
 
@@ -39,57 +38,20 @@ namespace Turbo.Construction
             return _part;
         }
 
-        public void SetWebElement(FieldInfo field)
+        public override Analysis Analysis => _part.Analysis;
+
+        public override ISelectorFinder Finder => _part.Finder;
+
+        public override void SetWebElement(ITarget target)
         {
-            var fieldName = field.Name;
-            if (RootNames.Contains(fieldName))
+            var name = target.Name;
+            if (RootNames.Contains(name))
             {
-                _part.Analysis.AssignRoot(field);
+                Analysis.AssignRoot(target);
                 return;
             }
 
-            var selector = _part.Finder.GetSelector(fieldName);
-            _part.Analysis.Assign(field, selector);
-        }
-
-        public void SetWebElement(PropertyInfo property)
-        {
-            var propertyName = property.Name;
-            if (RootNames.Contains(propertyName))
-            {
-                _part.Analysis.AssignRoot(property);
-                return;
-            }
-
-            var selector = _part.Finder.GetSelector(propertyName);
-            _part.Analysis.Assign(property, selector);
-        }
-
-        public void SetWebDriver(FieldInfo field)
-        {
-            _part.Analysis.AssignWithWebDriver(field);
-        }
-
-        public void SetPart(PropertyInfo property)
-        {
-        }
-
-        public void SetPart(FieldInfo field)
-        {
-            var partType = field.FieldType;
-            var partAnalyzer = _objectFactory.GetInstance<IPartAnalyzer>();
-            var partInfo = partAnalyzer.Analyze(partType);
-
-            _part.Analysis.AssignPart(field, partInfo);
-        }
-
-        public void SetPartCollection(FieldInfo field)
-        {
-            var partType = field.FieldType.GetElementType();
-            var analyzer = _objectFactory.GetInstance<IPartAnalyzer>();
-            var partInfo = analyzer.Analyze(partType);
-
-            _part.Analysis.AssignPartCollection(field, partInfo);
+            base.SetWebElement(target);
         }
     }
 }

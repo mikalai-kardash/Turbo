@@ -11,6 +11,8 @@ namespace Turbo.UnitTests.PageObjects.Test.Pages.Fields
         // locate and set element
         private IWebElement _element;
 
+        private IWebElement[] _links;
+
         private readonly IWebDriver notInjected;
         public readonly IWebDriver _notInjected;
 
@@ -27,6 +29,11 @@ namespace Turbo.UnitTests.PageObjects.Test.Pages.Fields
         public IWebDriver GetNotInjected()
         {
             return notInjected;
+        }
+
+        public IWebElement[] GetLinks()
+        {
+            return _links;
         }
     }
 }

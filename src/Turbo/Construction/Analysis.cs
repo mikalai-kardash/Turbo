@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using OpenQA.Selenium;
 using Turbo.Cache.Info;
 using Turbo.Construction.Context;
@@ -9,6 +8,7 @@ using Turbo.Construction.Steps.AssignPart;
 using Turbo.Construction.Steps.FindElement;
 using Turbo.Construction.Steps.Root;
 using Turbo.Construction.Steps.WebDriver;
+using Turbo.Construction.Target;
 
 namespace Turbo.Construction
 {
@@ -17,8 +17,8 @@ namespace Turbo.Construction
         private readonly List<ISetWebDriver> _setWebDriver
             = new List<ISetWebDriver>();
 
-        private readonly List<FindElement> _findElement
-            = new List<FindElement>();
+        private readonly List<IFindElement> _findElement
+            = new List<IFindElement>();
 
         private readonly List<IAssignRootElement> _assignRoot
             = new List<IAssignRootElement>();
@@ -33,51 +33,45 @@ namespace Turbo.Construction
             || _assignPart.Count > 0;
 
         public string RootSelector { get; set; }
+
         public Type Type { get; set; }
 
-        public void AssignWithWebDriver(FieldInfo field)
+        public void AssignWithWebDriver(ITarget target)
         {
-            _setWebDriver.Add(new SetWebDriver(field));
+            _setWebDriver.Add(new SetWebDriver(target));
         }
 
-        public void Assign(FieldInfo field, string selector)
+        public void Assign(ITarget target, string selector)
         {
             if (string.IsNullOrWhiteSpace(selector))
             {
-                throw new ArgumentNullException(nameof(selector));
+                throw new ArgumentNullException(nameof(selector), 
+                    $"Selector is not provided for field '{target.Name}' declared on '{target.GetTargetClass()}' type.");
             }
 
-            _findElement.Add(new FindElement(field, selector));
+            _findElement.Add(new FindElement(target, selector));
         }
 
-        public void Assign(PropertyInfo property, string selector)
+        public void AssignCollection(ITarget target, string selector)
         {
-            if (string.IsNullOrWhiteSpace(selector))
-            {
-                throw new ArgumentNullException(nameof(selector));
-            }
-
-            _findElement.Add(new FindElement(property, selector));
+            _findElement.Add(
+                new FindElementCollection(target, selector));
         }
 
-        public void AssignRoot(FieldInfo field)
+        public void AssignRoot(ITarget target)
         {
-            _assignRoot.Add(new AssignRootElement(field));
+            _assignRoot.Add(new AssignRootElement(target));
         }
 
-        public void AssignRoot(PropertyInfo property)
+        public void AssignPart(ITarget target, PartInfo partInfo)
         {
-            _assignRoot.Add(new AssignRootElement(property));
+            _assignPart.Add(new AssignPart(target, partInfo));
         }
 
-        public void AssignPart(FieldInfo field, PartInfo partInfo)
+        public void AssignPartCollection(ITarget target, PartInfo partInfo)
         {
-            _assignPart.Add(new AssignPart(field, partInfo));
-        }
-
-        public void AssignPartCollection(FieldInfo field, PartInfo partInfo)
-        {
-            _assignPart.Add(new AssignPartCollection(field, partInfo));
+            _assignPart.Add(
+                new AssignPartCollection(target, partInfo));
         }
 
         public object Activate(ExecutionContext context)
@@ -118,7 +112,7 @@ namespace Turbo.Construction
                 AssignRootElementForObject(context.Root, context.Instance);
                 FindAllElements(context.Root, context.Instance);
             }
-            
+
             AssignParts(context);
 
             return context.Instance;

@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using OpenQA.Selenium;
+using Turbo.Construction.Target;
 
 namespace Turbo.Construction
 {
@@ -32,16 +33,28 @@ namespace Turbo.Construction
                 {
                     continue;
                 }
-
+                
                 if (property.PropertyType == typeof(IWebElement))
                 {
-                    builder.SetWebElement(property);
+                    builder.SetWebElement(property.ToTarget());
                     continue;
                 }
 
                 if (property.PropertyType.IsClass)
                 {
-                    builder.SetPart(property);
+                    if (property.PropertyType.IsArray)
+                    {
+                        if (property.PropertyType.GetElementType() == typeof(IWebElement))
+                        {
+                            builder.SetWebElementCollection(property.ToTarget());
+                            continue;
+                        }
+
+                        builder.SetPartCollection(property.ToTarget());
+                        continue;
+                    }
+
+                    builder.SetPart(property.ToTarget());
                     continue;
                 }
             }
@@ -62,7 +75,7 @@ namespace Turbo.Construction
 
                 if (field.FieldType == typeof(IWebDriver))
                 {
-                    builder.SetWebDriver(field);
+                    builder.SetWebDriver(field.ToTarget());
                     continue;
                 }
 
@@ -72,7 +85,7 @@ namespace Turbo.Construction
                     // names and cannot be so easily used to find selectors later.
                     if (!field.IsDefined(typeof(CompilerGeneratedAttribute), false))
                     {
-                        builder.SetWebElement(field);
+                        builder.SetWebElement(field.ToTarget());
                     }
                     continue;
                 }
@@ -81,11 +94,17 @@ namespace Turbo.Construction
                 {
                     if (field.FieldType.IsArray)
                     {
-                        builder.SetPartCollection(field);
+                        if (field.FieldType.GetElementType() == typeof(IWebElement))
+                        {
+                            builder.SetWebElementCollection(field.ToTarget());
+                            continue;
+                        }
+
+                        builder.SetPartCollection(field.ToTarget());
                         continue;
                     }
 
-                    builder.SetPart(field);
+                    builder.SetPart(field.ToTarget());
                     continue;
                 }
             }

@@ -25,6 +25,8 @@ namespace Turbo.UnitTests.Construction.Test.Pages.Fields
 
             Assert.IsNull(page.GetNotInjected(), "notInjected");
             Assert.IsNull(page._notInjected, "_notInjected");
+
+            Assert.IsNotNull(page.GetLinks(), "links");
         }
     }
 }

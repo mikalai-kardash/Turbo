@@ -55,6 +55,7 @@
     <Compile Include="Cache\NullSelectorFinder.cs" />
     <Compile Include="Construction\Analysis.cs" />
     <Compile Include="Cache\Info\AppInfo.cs" />
+    <Compile Include="Construction\BaseAnalyzer.cs" />
     <Compile Include="Construction\Context\ExecutionContext.cs" />
     <Compile Include="Construction\Context\InstanceContext.cs" />
     <Compile Include="Construction\IPageAnalyzer.cs" />
@@ -66,6 +67,8 @@
     <Compile Include="Construction\Steps\AssignPart\AssignPart.cs" />
     <Compile Include="Construction\Steps\AssignPart\AssignPartCollection.cs" />
     <Compile Include="Construction\Steps\AssignPart\IAssignPart.cs" />
+    <Compile Include="Construction\Steps\FindElement\FindElementCollection.cs" />
+    <Compile Include="Construction\Steps\FindElement\IFindElement.cs" />
     <Compile Include="Construction\Steps\Root\AssignRootElement.cs" />
     <Compile Include="Construction\Steps\WebDriver\SetWebDriver.cs" />
     <Compile Include="Construction\Steps\FindElement\FindElement.cs" />
@@ -74,6 +77,10 @@
     <Compile Include="Construction\Steps\FindElement\IFindElementWithWebElement.cs" />
     <Compile Include="Construction\Steps\WebDriver\ISetWebDriver.cs" />
     <Compile Include="Cache\SelectorFinder.cs" />
+    <Compile Include="Construction\Target\Extensions.cs" />
+    <Compile Include="Construction\Target\FieldTarget.cs" />
+    <Compile Include="Construction\Target\ITarget.cs" />
+    <Compile Include="Construction\Target\PropertyTarget.cs" />
     <Compile Include="DI\IObjectRegistry.cs" />
     <Compile Include="DI\Registration.cs" />
     <Compile Include="DI\Registration{TFrom,TTo}.cs" />
