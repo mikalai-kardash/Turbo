@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Turbo.Cache;
 
-namespace Turbo.UnitTests
+namespace Turbo.UnitTests.Cache
 {
     [TestClass]
     public class SelectorFinderTests

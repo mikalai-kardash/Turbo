@@ -90,7 +90,7 @@
     <Compile Include="PageObjects\Test\Parts\Simple\Simple.cs" />
     <Compile Include="PageObjects\Test\TestApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SelectorFinderTests.cs" />
+    <Compile Include="Cache\SelectorFinderTests.cs" />
     <Compile Include="Stubs\WebDriver\Null\Expectable.cs" />
     <Compile Include="Stubs\WebDriver\Null\Expectations.cs" />
     <Compile Include="Stubs\WebDriver\Null\NullDriver.cs" />
@@ -98,6 +98,7 @@
     <Compile Include="Stubs\WebDriver\Null\NullOptions.cs" />
     <Compile Include="Stubs\WebDriver\Null\NullTargetLocator.cs" />
     <Compile Include="Stubs\WebDriver\Null\NullElement.cs" />
+    <Compile Include="TurboInitializerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Automation.PageObjects\Automation.PageObjects.csproj">

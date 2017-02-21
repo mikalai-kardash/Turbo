@@ -22,6 +22,11 @@ namespace Turbo.Cache
             }
 
             var pageMeta = _metadata.GetPageMeta<TPage>();
+            if (pageMeta.Meta == null)
+            {
+                return null;
+            }
+
             return TurboSync.AddPage(appInfo.App, pageMeta);
         }
 
@@ -34,6 +39,11 @@ namespace Turbo.Cache
             }
 
             var appMeta = _metadata.GetAppMeta<TApp>();
+            if (appMeta.Meta == null)
+            {
+                return null;
+            }
+            
             return TurboSync.AddApp(appMeta);
         }
 
@@ -46,6 +56,11 @@ namespace Turbo.Cache
             }
 
             var meta = _metadata.GetPartMeta(partType);
+            if (meta.Meta == null)
+            {
+                return null;
+            }
+
             return TurboSync.AddPart(meta);
         }
 

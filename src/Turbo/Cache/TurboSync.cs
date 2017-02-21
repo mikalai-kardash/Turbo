@@ -55,7 +55,16 @@ namespace Turbo.Cache
         public static AppInfo AddApp(Metadata<App> app)
         {
             var info = new AppInfo {App = app};
-            Apps.Add(app.Type, info);
+
+            if (Apps.ContainsKey(app.Type))
+            {
+                Apps[app.Type] = info;
+            }
+            else
+            {
+                Apps.Add(app.Type, info);
+            }
+
             return info;
         }
 
@@ -76,7 +85,14 @@ namespace Turbo.Cache
 
             pageInfo.Analysis.Type = page.Type;
 
-            Pages.Add(page.Type, pageInfo);
+            if (Pages.ContainsKey(page.Type))
+            {
+                Pages[page.Type] = pageInfo;
+            }
+            else
+            {
+                Pages.Add(page.Type, pageInfo);
+            }
 
             return pageInfo;
         }

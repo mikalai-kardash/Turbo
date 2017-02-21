@@ -84,6 +84,7 @@
     <Compile Include="DI\IObjectRegistry.cs" />
     <Compile Include="DI\Registration.cs" />
     <Compile Include="DI\Registration{TFrom,TTo}.cs" />
+    <Compile Include="GlobalConfiguration.cs" />
     <Compile Include="ITurboFactory.cs" />
     <Compile Include="Metadata\IMetadataLoader.cs" />
     <Compile Include="Metadata\AppMeta{T}.cs" />
