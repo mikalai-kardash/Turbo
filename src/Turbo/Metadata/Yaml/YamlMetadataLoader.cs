@@ -24,6 +24,11 @@ namespace Turbo.Metadata.Yaml
             return GetMetadata<Part, T>().ToMeta<T>();
         }
 
+        public Metadata<App> GetAppMeta(Type appType)
+        {
+            return GetMetadata<App>(appType).ToMeta(appType);
+        }
+
         public Metadata<Part> GetPartMeta(Type partType)
         {
             return GetMetadata<Part>(partType).ToMeta(partType);

@@ -34,6 +34,7 @@ namespace Turbo.Construction
             if (!_part.Analysis.IsDone)
             {
                 TypeAnalyzer.Analyze(partType, this);
+                _part.Analysis.IsDone = true;
             }
             return _part;
         }

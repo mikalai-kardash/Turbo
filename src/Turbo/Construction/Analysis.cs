@@ -26,11 +26,7 @@ namespace Turbo.Construction
         private readonly List<IAssignPart> _assignPart
             = new List<IAssignPart>();
 
-        public bool IsDone =>
-            _setWebDriver.Count > 0
-            || _findElement.Count > 0
-            || _assignRoot.Count > 0
-            || _assignPart.Count > 0;
+        public bool IsDone { get; set; }
 
         public string RootSelector { get; set; }
 

@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Turbo.Cache;
 using Turbo.Cache.Info;
 using Turbo.Construction;
@@ -30,7 +33,6 @@ namespace Turbo
 
         internal static void ConfigureObjectRegistry(IObjectRegistry registry, TurboConfiguration config)
         {
-            //registry.RegisterInstance(config);
             registry.RegisterInstance(GlobalConfiguration.MetadataLoader);
 
             RegisterBuiltInTypes(registry);
@@ -64,15 +66,15 @@ namespace Turbo
 
         public static void AddApp<TApp>()
         {
-            AddAppInternal<TApp>();
+            AddAppInternal(typeof(TApp));
         }
 
-        private static AppInfo AddAppInternal<TApp>()
+        private static AppInfo AddAppInternal(Type appType)
         {
             var objectFactory = GlobalConfiguration.ObjectFactory;
             var loader = objectFactory.GetInstance<IMetadataLoader>();
 
-            var meta = loader.GetAppMeta<TApp>();
+            var meta = loader.GetAppMeta(appType);
             if (meta.Meta == null)
             {
                 return null;
@@ -86,13 +88,18 @@ namespace Turbo
             AppInfo appInfo;
             if (!TurboSync.TryGetApp(typeof(TApp), out appInfo))
             {
-                appInfo = AddAppInternal<TApp>();
+                appInfo = AddAppInternal(typeof(TApp));
             }
 
+            AddPageInternal(appInfo, typeof(TPage));
+        }
+
+        private static void AddPageInternal(AppInfo appInfo, Type pageType)
+        {
             IObjectFactory objectFactory = GlobalConfiguration.ObjectFactory;
             var loader = objectFactory.GetInstance<IMetadataLoader>();
 
-            var page = loader.GetPageMeta<TPage>();
+            var page = loader.GetPageMeta(pageType);
             if (page.Meta == null)
             {
                 return;
@@ -101,11 +108,54 @@ namespace Turbo
             TurboSync.AddPage(appInfo.App, page);
 
             var pageAnalyzer = objectFactory.GetInstance<IPageAnalyzer>();
-            pageAnalyzer.Analyze(typeof(TPage));
+            pageAnalyzer.Analyze(pageType);
         }
 
         public static void Scan(Assembly assembly)
         {
+            var types = GetTypes(assembly).ToList();
+
+            var apps = types
+                .Where(t => t.Name.EndsWith("App"))
+                .Select(AddAppInternal)
+                .ToList();
+
+            var pages = types.Where(t => t.Name.EndsWith("Page"));
+            foreach (var page in pages)
+            {
+                var pns = page.Namespace;
+                if (pns == null)
+                {
+                    continue;
+                } 
+
+                foreach (var app in apps)
+                {
+                    var ans = app.App.Type.Namespace;
+                    if (ans == null)
+                    {
+                        continue;
+                    }
+
+                    if (pns.StartsWith(ans, StringComparison.OrdinalIgnoreCase))
+                    {
+                        AddPageInternal(app, page);
+                        break;
+                    }
+                }
+            }
+        }
+
+        private static IEnumerable<Type> GetTypes(Assembly assembly)
+        {
+            try
+            {
+                return assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                return ex.Types.Where(t => t != null).ToArray();
+            }
         }
     }
 }

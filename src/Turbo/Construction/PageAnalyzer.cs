@@ -23,6 +23,7 @@ namespace Turbo.Construction
             if (!_page.Analysis.IsDone)
             {
                 TypeAnalyzer.Analyze(pageType, this);
+                _page.Analysis.IsDone = true;
             }
             return _page;
         }

@@ -30,5 +30,11 @@ namespace Turbo.Metadata.Models
             var type = typeof(PageMeta<>).MakeGenericType(pageType);
             return (Metadata<Page>) Activator.CreateInstance(type, page);
         }
+
+        public static Metadata<App> ToMeta(this App app, Type appType)
+        {
+            var type = typeof(AppMeta<>).MakeGenericType(appType);
+            return (Metadata<App>) Activator.CreateInstance(type, app);
+        }
     }
 }
