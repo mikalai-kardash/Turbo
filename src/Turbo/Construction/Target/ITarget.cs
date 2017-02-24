@@ -5,12 +5,15 @@ namespace Turbo.Construction.Target
     public interface ITarget
     {
         string Name { get; }
-        Type TargetType { get; }
+
         bool IsArray { get; }
         bool IsClass { get; }
+        bool IsPublic { get; }
 
-        void SetValue(object instance, object value);
+        Type TargetType { get; }
         Type GetTypeOfArray();
         Type GetTargetClass();
+
+        void SetValue(object instance, object value);
     }
 }

@@ -93,5 +93,11 @@ namespace Turbo.UnitTests.PageObjects.Test.Parts.Simple
         public IWebElement Element { get; set; }
 
         #endregion
+
+        #region Element[]
+
+        public IWebElement Links { get; set; }
+
+        #endregion
     }
 }

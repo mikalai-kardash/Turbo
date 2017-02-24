@@ -13,14 +13,22 @@ namespace Turbo.Construction.Target
         }
 
         public string Name => _property.Name;
-        public Type TargetType => _property.PropertyType;
+
+        public bool IsPublic
+        {
+            get
+            {
+                if (!_property.CanWrite) return false;
+                var setter = _property.GetSetMethod(true);
+                return setter.IsPublic;
+            }
+        }
+
         public bool IsArray => _property.PropertyType.IsArray;
+
         public bool IsClass => _property.PropertyType.IsClass;
 
-        public void SetValue(object instance, object value)
-        {
-            _property.SetValue(instance, value);
-        }
+        public Type TargetType => _property.PropertyType;
 
         public Type GetTypeOfArray()
         {
@@ -30,6 +38,11 @@ namespace Turbo.Construction.Target
         public Type GetTargetClass()
         {
             return _property.DeclaringType;
+        }
+
+        public void SetValue(object instance, object value)
+        {
+            _property.SetValue(instance, value);
         }
     }
 }

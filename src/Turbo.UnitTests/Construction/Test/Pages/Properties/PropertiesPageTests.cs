@@ -23,11 +23,11 @@ namespace Turbo.UnitTests.Construction.Test.Pages.Properties
             Assert.IsNotNull(page.GetPrivateBrowser(), "PrivateBrowser");
             Assert.IsNull(page.ReadOnlyBrowser, "ReadOnlyBrowser");
 
-            Assert.IsNotNull(page.Element, "Element");
+            Assert.IsNull(page.Element, "Element");
             Assert.IsNotNull(page.GetElement(), "(private) Element");
             Assert.IsNull(page._Element, "ReadOnlyElement");
 
-            Assert.IsNotNull(page.Links, "Links");
+            Assert.IsNull(page.Links, "Links");
         }
     }
 }

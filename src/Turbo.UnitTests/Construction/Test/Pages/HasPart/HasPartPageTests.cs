@@ -47,13 +47,15 @@ namespace Turbo.UnitTests.Construction.Test.Pages.HasPart
             Assert.IsNotNull(simple.Browser, "Browser (property)");
 
             // Property - Root
-            Assert.IsNotNull(simple.Root, "Root");
-            Assert.IsNotNull(simple._Root, "_Root");
+            Assert.IsNull(simple.Root, "Root");
+            Assert.IsNull(simple._Root, "_Root");
             Assert.IsNotNull(simple.GetROot(), "rOot");
 
             // Property - Element
-            Assert.IsNotNull(simple.Element, "Element");
-        }
+            Assert.IsNull(simple.Element, "Element");
 
+            // Property - Element[]
+            Assert.IsNull(simple.Links, "Links");
+        }
     }
 }

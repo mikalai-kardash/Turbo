@@ -70,6 +70,10 @@ namespace Turbo.Construction
 
             if (target.TargetType == typeof(IWebElement))
             {
+                if (target.IsPublic)
+                {
+                    return;
+                }
                 builder.SetWebElement(target);
                 return;
             }
@@ -83,6 +87,11 @@ namespace Turbo.Construction
             {
                 if (target.GetTypeOfArray() == typeof(IWebElement))
                 {
+                    if (target.IsPublic)
+                    {
+                        return;
+                    }
+
                     builder.SetWebElementCollection(target);
                     return;
                 }
