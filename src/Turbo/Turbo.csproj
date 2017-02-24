@@ -49,6 +49,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behavior\Errors.cs" />
+    <Compile Include="Behavior\IError.cs" />
     <Compile Include="Cache\IInfoProvider.cs" />
     <Compile Include="Cache\InfoProvider.cs" />
     <Compile Include="Cache\ISelectorFinder.cs" />
@@ -86,6 +88,16 @@
     <Compile Include="DI\Registration{TFrom,TTo}.cs" />
     <Compile Include="GlobalConfiguration.cs" />
     <Compile Include="ITurboFactory.cs" />
+    <Compile Include="Logging\Extensions.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\ILogger{T}.cs" />
+    <Compile Include="Logging\ILoggingFactory.cs" />
+    <Compile Include="Logging\LogEvent.cs" />
+    <Compile Include="Logging\LoggerMessage.cs" />
+    <Compile Include="Logging\LoggerState.cs" />
+    <Compile Include="Logging\Logger{T}.cs" />
+    <Compile Include="Logging\LoggingEvents.cs" />
+    <Compile Include="Logging\LogLevel.cs" />
     <Compile Include="Metadata\IMetadataLoader.cs" />
     <Compile Include="Metadata\AppMeta{T}.cs" />
     <Compile Include="Metadata\Metadata{TMeta}.cs" />
@@ -102,6 +114,9 @@
     <Compile Include="Cache\Info\PageInfo.cs" />
     <Compile Include="Cache\Info\PartInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Statistics\Extensions.cs" />
+    <Compile Include="Statistics\WebDriverEvents.cs" />
+    <Compile Include="Statistics\WebDriverWrapper.cs" />
     <Compile Include="TurboConfiguration.cs" />
     <Compile Include="TurboFactory.cs" />
     <Compile Include="TurboInitializer.cs" />
