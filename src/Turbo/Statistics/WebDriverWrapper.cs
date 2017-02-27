@@ -1,25 +1,24 @@
 ﻿using System.Collections.ObjectModel;
 using OpenQA.Selenium;
-using Turbo.Logging;
+using Turbo.Events;
 
 namespace Turbo.Statistics
 {
     public class WebDriverWrapper : IWebDriver
     {
         private readonly IWebDriver _driver;
-        private readonly ILogger<WebDriverWrapper> _logger;
+        private readonly EventSink<WebDriverWrapper> _sink;
 
-        public WebDriverWrapper(IWebDriver driver, ILogger<WebDriverWrapper> logger)
+        public WebDriverWrapper(IWebDriver driver, EventSink<WebDriverWrapper> sink)
         {
             _driver = driver;
-            _logger = logger;
+            _sink = sink;
         }
 
         public IWebElement FindElement(By by)
         {
-            _logger.Trace(WebDriverEvents.SelectorUsage, "Looking for element using {by}.", by);
-
-            using (LoggerMessage.DefineScope<By>("Looking for element using {by}.")(_logger, by))
+            _sink.Info(EventIds.SelectorUsage, "Find element by {by}.", by);
+            using (_sink.Measure(EventIds.FindElement, "Find element by {by}.", by))
             {
                 return _driver.FindElement(by);
             }
