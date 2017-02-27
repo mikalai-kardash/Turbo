@@ -57,7 +57,12 @@ namespace Turbo.UnitTests.Construction.Test.Pages
 
         protected T GetPage<T>()
         {
-            return PageBuilder.Build<T>(WebDriver);
+            return PageBuilder.BuildPage<T>(WebDriver);
+        }
+
+        protected T GetPart<T>()
+        {
+            return PageBuilder.BuildPart<T>(WebDriver);
         }
     }
 }

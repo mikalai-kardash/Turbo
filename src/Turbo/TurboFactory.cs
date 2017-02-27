@@ -36,7 +36,7 @@ namespace Turbo
                 pageBuilder.NavigateToPageFirst();
             }
 
-            return pageBuilder.Build<TPage>(driver);
+            return pageBuilder.BuildPage<TPage>(driver);
         }
     }
 }

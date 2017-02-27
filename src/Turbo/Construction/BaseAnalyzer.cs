@@ -39,7 +39,10 @@ namespace Turbo.Construction
         public virtual void SetPart(ITarget target)
         {
             var partInfo = AnalyzePart(target.TargetType);
-            Analysis.AssignPart(target, partInfo);
+            if (partInfo.Part.Meta.Immediate)
+            {
+                Analysis.AssignPart(target, partInfo);
+            }
         }
 
         public virtual void SetPartCollection(ITarget target)

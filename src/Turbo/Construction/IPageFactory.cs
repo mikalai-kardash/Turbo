@@ -4,7 +4,10 @@ namespace Turbo.Construction
 {
     public interface IPageFactory
     {
-        TPage Build<TPage>(IWebDriver driver);
+        T BuildPage<T>(IWebDriver driver);
+        T BuildPart<T>(IWebDriver driver);
+        T BuildPart<T>(IWebDriver driver, IWebElement parent);
+
         void NavigateToPageFirst();
     }
 }

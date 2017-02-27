@@ -2,10 +2,10 @@
 using Turbo.DI;
 using Turbo.Metadata;
 using Turbo.Metadata.Yaml;
-using Turbo.UnitTests.DI.Stubs;
 using Turbo.UnitTests.DI.Stubs.Complex;
 using Turbo.UnitTests.DI.Stubs.Simple;
 using Turbo.UnitTests.DI.Stubs.Typed;
+using Turbo.UnitTests.DI.Stubs.Unregistered;
 
 namespace Turbo.UnitTests.DI
 {
@@ -18,6 +18,12 @@ namespace Turbo.UnitTests.DI
         public void SetUp()
         {
             _factory = new DefaultObjectFactory();
+        }
+
+        [TestMethod]
+        public void Creates_unregistered_class()
+        {
+            Assert.IsNotNull(_factory.GetInstance<SimpleClass>());
         }
 
         [TestMethod]

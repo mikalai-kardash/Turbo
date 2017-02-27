@@ -6,6 +6,8 @@ namespace Turbo.Metadata.Models
     {
         public string Selector { get; set; }
 
+        public bool Immediate { get; set; } = true;
+
         public Dictionary<string, string> Elements { get; set; }
     }
 }

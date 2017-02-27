@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Turbo.DI
 {
@@ -11,6 +12,9 @@ namespace Turbo.DI
 
         private readonly IDictionary<Type, Registration> _registrations
             = new Dictionary<Type, Registration>();
+
+        private readonly IDictionary<Type, Delegate> _expressions 
+            = new Dictionary<Type, Delegate>();
 
         public DefaultObjectFactory()
         {
@@ -47,8 +51,10 @@ namespace Turbo.DI
                 var r = FindFor(type);
                 if (r == null)
                 {
-                    // When type is not registered - try to create it anyways.
-                    return Activator.CreateInstance(type);
+                    var l = Expression.Lambda(Expression.New(type));
+                    var c = l.Compile();
+
+                    return c.DynamicInvoke();
                 }
 
                 var ds = r.Dependencies.Select(GetInstance).ToArray();
