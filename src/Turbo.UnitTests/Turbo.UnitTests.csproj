@@ -68,6 +68,11 @@
     <Compile Include="DI\Stubs\IComplexService.cs" />
     <Compile Include="DI\Stubs\ISimpleService.cs" />
     <Compile Include="DI\Stubs\SimpleService.cs" />
+    <Compile Include="Events\EventSystemTests.cs" />
+    <Compile Include="Events\StringExtensionsTests.cs" />
+    <Compile Include="Events\TemplatedStringTests.cs" />
+    <Compile Include="Events\Reports\Test\TestConsumer.cs" />
+    <Compile Include="Events\Reports\Test\TestReport.cs" />
     <Compile Include="Metadata\Yaml\YamlMetadataLoaderTests.cs" />
     <Compile Include="PageObjects\Google\GoogleSearchApp.cs" />
     <Compile Include="PageObjects\Google\Pages\Search\Parts\Header\Header.cs" />
@@ -87,6 +92,8 @@
     <Compile Include="PageObjects\Test\Pages\SimpleList\SimpleListPage.cs" />
     <Compile Include="PageObjects\Test\Pages\SimpleList\Parts\ListItem\ListItem.cs" />
     <Compile Include="PageObjects\Test\Pages\Normal\Parts\Normal\Normal.cs" />
+    <Compile Include="PageObjects\Test\Pages\Wait\Parts\Waitable\Waitable.cs" />
+    <Compile Include="PageObjects\Test\Pages\Wait\WaitPage.cs" />
     <Compile Include="PageObjects\Test\Parts\Simple\Simple.cs" />
     <Compile Include="PageObjects\Test\TestApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -129,6 +136,8 @@
     <EmbeddedResource Include="PageObjects\Test\Pages\NormalList\NormalListPage.yaml" />
     <EmbeddedResource Include="PageObjects\Test\Pages\NormalList\Parts\Container\Container.yaml" />
     <EmbeddedResource Include="PageObjects\Test\Pages\NormalList\Parts\ContainerItem\ContainerItem.yaml" />
+    <EmbeddedResource Include="PageObjects\Test\Pages\Wait\WaitPage.yaml" />
+    <EmbeddedResource Include="PageObjects\Test\Pages\Wait\Parts\Waitable\Waitable.yaml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="PageObjects\Google\Parts\" />

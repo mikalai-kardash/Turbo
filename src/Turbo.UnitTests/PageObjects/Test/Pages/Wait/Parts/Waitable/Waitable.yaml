@@ -1,0 +1,7 @@
+﻿selector: '#root'
+
+wait: true
+
+elements : {
+	element: '.cool'
+}
