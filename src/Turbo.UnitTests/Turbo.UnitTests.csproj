@@ -69,6 +69,9 @@
     <Compile Include="DI\Stubs\ISimpleService.cs" />
     <Compile Include="DI\Stubs\SimpleService.cs" />
     <Compile Include="Events\EventSystemTests.cs" />
+    <Compile Include="Events\Reports\SampleConsumer.cs" />
+    <Compile Include="Events\Reports\SampleReport.cs" />
+    <Compile Include="Events\Reports\SimpleReportTests.cs" />
     <Compile Include="Events\StringExtensionsTests.cs" />
     <Compile Include="Events\TemplatedStringTests.cs" />
     <Compile Include="Events\Reports\Test\TestConsumer.cs" />
