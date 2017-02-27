@@ -44,15 +44,15 @@ namespace Turbo.DI
                     return instance;
                 }
 
-                Registration r;
-                if (!_registrations.TryGetValue(type, out r))
+                var r = FindFor(type);
+                if (r == null)
                 {
                     // When type is not registered - try to create it anyways.
                     return Activator.CreateInstance(type);
                 }
 
                 var ds = r.Dependencies.Select(GetInstance).ToArray();
-                return Activator.CreateInstance(r.To, ds);
+                return Activator.CreateInstance(r.GetConstructionType(type), ds);
             }
             catch (Exception ex)
             {
@@ -60,10 +60,37 @@ namespace Turbo.DI
             }
         }
 
+        private Registration FindFor(Type type)
+        {
+            Registration r;
+            if (_registrations.TryGetValue(type, out r))
+            {
+                return r;
+            }
+
+            foreach (var registration in _registrations.Values)
+            {
+                if (registration.IsRelatedTo(type))
+                {
+                    r = registration;
+                    break;
+                }
+            }
+
+            return r;
+        }
+
         public Registration<TFrom, TTo> RegisterType<TFrom, TTo>()
             where TTo : TFrom
         {
             var registration = new Registration<TFrom, TTo>();
+            _registrations.Add(registration.From, registration);
+            return registration;
+        }
+
+        public Registration RegisterType(Type from, Type to)
+        {
+            var registration = new Registration(from, to);
             _registrations.Add(registration.From, registration);
             return registration;
         }

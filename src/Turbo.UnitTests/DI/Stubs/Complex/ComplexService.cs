@@ -1,6 +1,7 @@
 ﻿using System;
+using Turbo.UnitTests.DI.Stubs.Simple;
 
-namespace Turbo.UnitTests.DI.Stubs
+namespace Turbo.UnitTests.DI.Stubs.Complex
 {
     public class ComplexService : IComplexService
     {

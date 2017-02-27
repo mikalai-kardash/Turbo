@@ -3,6 +3,9 @@ using Turbo.DI;
 using Turbo.Metadata;
 using Turbo.Metadata.Yaml;
 using Turbo.UnitTests.DI.Stubs;
+using Turbo.UnitTests.DI.Stubs.Complex;
+using Turbo.UnitTests.DI.Stubs.Simple;
+using Turbo.UnitTests.DI.Stubs.Typed;
 
 namespace Turbo.UnitTests.DI
 {
@@ -62,6 +65,14 @@ namespace Turbo.UnitTests.DI
 
             var service = _factory.GetInstance<IComplexService>();
 
+            Assert.IsNotNull(service);
+        }
+
+        [TestMethod]
+        public void Creates_registered_typed_service()
+        {
+            _factory.RegisterType(typeof(ITypedService<>), typeof(TypedService<>));
+            var service = _factory.GetInstance<ITypedService<SomeClass>>();
             Assert.IsNotNull(service);
         }
     }

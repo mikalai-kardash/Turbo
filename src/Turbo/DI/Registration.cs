@@ -24,5 +24,26 @@ namespace Turbo.DI
         }
 
         public IEnumerable<Type> Dependencies { get; }
+
+        public bool IsRelatedTo(Type type)
+        {
+            if (!From.IsConstructedGenericType && type.IsGenericType)
+            {
+                return From == type.GetGenericTypeDefinition();
+            }
+
+            return type == From;
+        }
+
+        public Type GetConstructionType(Type type)
+        {
+            if (type.IsGenericType && !From.IsConstructedGenericType)
+            {
+                var args = type.GetGenericArguments();
+                return To.MakeGenericType(args);
+            }
+
+            return To;
+        }
     }
 }

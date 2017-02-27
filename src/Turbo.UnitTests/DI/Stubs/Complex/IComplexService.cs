@@ -1,4 +1,4 @@
-﻿namespace Turbo.UnitTests.DI.Stubs
+﻿namespace Turbo.UnitTests.DI.Stubs.Complex
 {
     public interface IComplexService
     {
