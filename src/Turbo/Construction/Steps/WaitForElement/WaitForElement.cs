@@ -17,17 +17,17 @@ namespace Turbo.Construction.Steps.WaitForElement
         public void Run(IWebDriver driver)
         {
             var by = By.CssSelector(_cssSelector);
-
             var wait = new WebDriverWait(driver, _60Seconds);
-            wait.Until(d =>
-            {
-                var e = d.FindElement(by);
-                if (e == null)
-                {
-                    return false;
-                }
-                return true;
-            });
+
+            wait.Until(d => d.FindElement(by) != null);
+        }
+
+        public void Run(IWebDriver driver, IWebElement element)
+        {
+            var by = By.CssSelector(_cssSelector);
+            var wait = new WebDriverWait(driver, _60Seconds);
+
+            wait.Until(d => element.FindElement(by) != null);
         }
     }
 }

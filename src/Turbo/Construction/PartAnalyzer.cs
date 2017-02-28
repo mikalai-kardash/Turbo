@@ -33,7 +33,14 @@ namespace Turbo.Construction
             _part = _infoProvider.GetPartInfo(partType);
             if (!_part.Analysis.IsDone)
             {
+                var waitSelector = _part.Part?.Meta?.Wait;
+                if (!string.IsNullOrWhiteSpace(waitSelector))
+                {
+                    _part.Analysis.WaitForElement(waitSelector);
+                }
+
                 TypeAnalyzer.Analyze(partType, this);
+
                 _part.Analysis.IsDone = true;
             }
             return _part;

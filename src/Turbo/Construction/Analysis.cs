@@ -106,10 +106,7 @@ namespace Turbo.Construction
 
         private object GetInstance(InstanceContext context)
         {
-            foreach (var waitForElement in _wait)
-            {
-                waitForElement.Run(context.Driver);
-            }
+            Wait(context);
 
             AssignWebDriversForObject(context.Driver, context.Instance);
 
@@ -126,6 +123,21 @@ namespace Turbo.Construction
             AssignParts(context);
 
             return context.Instance;
+        }
+
+        private void Wait(InstanceContext context)
+        {
+            foreach (var waitForElement in _wait)
+            {
+                if (context.Root == null)
+                {
+                    waitForElement.Run(context.Driver);
+                }
+                else
+                {
+                    waitForElement.Run(context.Driver, context.Root);
+                }
+            }
         }
 
         private void AssignParts(InstanceContext context)

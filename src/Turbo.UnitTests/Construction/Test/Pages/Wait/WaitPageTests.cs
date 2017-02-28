@@ -29,5 +29,28 @@ namespace Turbo.UnitTests.Construction.Test.Pages.Wait
             var expectation = WebDriver.Verify("#wait-for");
             Assert.IsTrue(expectation.WasReturned(), $"Attempts: {expectation.Requests}");
         }
+
+        [TestMethod]
+        public void Waits_for_element_on_part()
+        {
+            WebDriver
+                .Expect("#wait-for", new NullElement())
+                .ReturnAfter(5.Attempt());
+
+            var part = new NullElement();
+            WebDriver.Expect("#waitable", part);
+
+            part.Expect(".cool", new NullElement());
+            part.Expect("#something", new NullElement())
+                .ReturnAfter(3.Attempt());
+
+            var page = GetPage<WaitPage>();
+
+            Assert.IsNotNull(page);
+            Assert.IsNotNull(page.Waitable);
+
+            var expectation = part.Verify("#something");
+            Assert.IsTrue(expectation.WasReturned(), $"Attemps: {expectation.Requests}.");
+        }
     }
 }
