@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using OpenQA.Selenium;
@@ -56,9 +55,5 @@ namespace Turbo.UnitTests.Stubs.WebDriver.Null
         public bool Displayed { get; }
 
         public By FoundBy { get; set; }
-
-        public void ExpectFindElements(IEnumerable<NullElement> returns)
-        {
-        }
     }
 }

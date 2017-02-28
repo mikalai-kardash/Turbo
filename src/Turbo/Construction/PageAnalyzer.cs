@@ -22,7 +22,14 @@ namespace Turbo.Construction
             _page = _infoProvider.GetPageInfo(pageType);
             if (!_page.Analysis.IsDone)
             {
+                var waitSelector = _page.Page?.Meta?.Wait;
+                if (!string.IsNullOrWhiteSpace(waitSelector))
+                {
+                    _page.Analysis.WaitForElement(waitSelector);
+                }
+
                 TypeAnalyzer.Analyze(pageType, this);
+
                 _page.Analysis.IsDone = true;
             }
             return _page;

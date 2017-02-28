@@ -64,6 +64,7 @@
     <Compile Include="Construction\Test\Pages\PageTestBase.cs" />
     <Compile Include="Construction\Test\Pages\Properties\PropertiesPageTests.cs" />
     <Compile Include="Construction\Test\Pages\SimpleList\SimpleListPageTests.cs" />
+    <Compile Include="Construction\Test\Pages\Wait\WaitPageTests.cs" />
     <Compile Include="DI\DefaultObjectFactoryTests.cs" />
     <Compile Include="DI\Stubs\Complex\ComplexService.cs" />
     <Compile Include="DI\Stubs\Complex\IComplexService.cs" />
@@ -110,7 +111,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Cache\SelectorFinderTests.cs" />
     <Compile Include="Stubs\WebDriver\Null\Expectable.cs" />
+    <Compile Include="Stubs\WebDriver\Null\Expectation.cs" />
     <Compile Include="Stubs\WebDriver\Null\Expectations.cs" />
+    <Compile Include="Stubs\WebDriver\Null\Int32Extensions.cs" />
     <Compile Include="Stubs\WebDriver\Null\NullDriver.cs" />
     <Compile Include="Stubs\WebDriver\Null\NullNavigation.cs" />
     <Compile Include="Stubs\WebDriver\Null\NullOptions.cs" />

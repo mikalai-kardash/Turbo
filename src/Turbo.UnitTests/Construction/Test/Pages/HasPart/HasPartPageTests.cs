@@ -19,7 +19,12 @@ namespace Turbo.UnitTests.Construction.Test.Pages.HasPart
         [TestMethod]
         public void Creates_page()
         {
-            WebDriver.Expect(".simplePart", new NullElement());
+            var simple = new NullElement();
+            WebDriver.Expect(".simplePart", simple);
+
+            simple.Expect(".byClass", new NullElement());
+            simple.Expect("a", new NullElement());
+
             var page = GetPage<HasPartPage>();
             VerifySimple(page.Simple);
         }

@@ -5,6 +5,7 @@ namespace Turbo.Metadata.Models
     public class Part
     {
         public string Selector { get; set; }
+        public string Wait { get; set; }
 
         public bool Immediate { get; set; } = true;
 

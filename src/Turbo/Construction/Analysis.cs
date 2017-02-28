@@ -7,6 +7,7 @@ using Turbo.Construction.Context;
 using Turbo.Construction.Steps.AssignPart;
 using Turbo.Construction.Steps.FindElement;
 using Turbo.Construction.Steps.Root;
+using Turbo.Construction.Steps.WaitForElement;
 using Turbo.Construction.Steps.WebDriver;
 using Turbo.Construction.Target;
 
@@ -25,6 +26,9 @@ namespace Turbo.Construction
 
         private readonly List<IAssignPart> _assignPart
             = new List<IAssignPart>();
+
+        private readonly List<IWaitForElement> _wait 
+            = new List<IWaitForElement>();
 
         public bool IsDone { get; set; }
 
@@ -70,6 +74,11 @@ namespace Turbo.Construction
                 new AssignPartCollection(target, partInfo));
         }
 
+        public void WaitForElement(string waitSelector)
+        {
+            _wait.Add(new WaitForElement(waitSelector));
+        }
+
         public object Activate(ExecutionContext context)
         {
             return ActivateCollection(context).FirstOrDefault();
@@ -97,6 +106,11 @@ namespace Turbo.Construction
 
         private object GetInstance(InstanceContext context)
         {
+            foreach (var waitForElement in _wait)
+            {
+                waitForElement.Run(context.Driver);
+            }
+
             AssignWebDriversForObject(context.Driver, context.Instance);
 
             if (context.Root == null)
@@ -122,6 +136,14 @@ namespace Turbo.Construction
             }
         }
 
+        private void FindAllElements(IWebDriver driver, object instance)
+        {
+            foreach (var findElement in _findElement)
+            {
+                findElement.Run(driver, instance);
+            }
+        }
+
         private void FindAllElements(IWebElement root, object instance)
         {
             foreach (var findElement in _findElement)
@@ -142,14 +164,6 @@ namespace Turbo.Construction
         {
             var by = By.CssSelector(RootSelector);
             return searchContext.FindElements(by);
-        }
-
-        private void FindAllElements(IWebDriver driver, object instance)
-        {
-            foreach (var findElement in _findElement)
-            {
-                findElement.Run(driver, instance);
-            }
         }
 
         private void AssignWebDriversForObject(IWebDriver driver, object instance)

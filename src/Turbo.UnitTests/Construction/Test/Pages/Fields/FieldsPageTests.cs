@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Turbo.UnitTests.PageObjects.Test;
 using Turbo.UnitTests.PageObjects.Test.Pages.Fields;
+using Turbo.UnitTests.Stubs.WebDriver.Null;
 
 namespace Turbo.UnitTests.Construction.Test.Pages.Fields
 {
@@ -17,6 +18,9 @@ namespace Turbo.UnitTests.Construction.Test.Pages.Fields
         [TestMethod]
         public void Creates_page()
         {
+            WebDriver.Expect("#byId", new NullElement());
+            WebDriver.Expect("a", new NullElement(), new NullElement());
+
             var page = GetPage<FieldsPage>();
 
             Assert.IsNotNull(page.GetBrowser(), "browser");

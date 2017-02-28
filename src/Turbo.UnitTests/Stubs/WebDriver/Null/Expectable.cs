@@ -9,7 +9,7 @@ namespace Turbo.UnitTests.Stubs.WebDriver.Null
     {
         private readonly Expectations _expectations = new Expectations();
 
-        public void Expect(string cssSelector, params NullElement[] elements)
+        public Expectation Expect(string cssSelector, params NullElement[] elements)
         {
             var by = By.CssSelector(cssSelector);
 
@@ -19,7 +19,15 @@ namespace Turbo.UnitTests.Stubs.WebDriver.Null
                 e.Parent = this;
             }
 
-            _expectations.Add(by, elements);
+            return _expectations.Add(by, elements);
+        }
+
+        public Expectation Verify(string cssSelector)
+        {
+            var by = By.CssSelector(cssSelector);
+            Expectation expectation;
+            _expectations.TryGetExpectation(by, out expectation);
+            return expectation;
         }
 
         public IWebElement FindElement(By by)
@@ -27,7 +35,8 @@ namespace Turbo.UnitTests.Stubs.WebDriver.Null
             NullElement[] elements;
             if (!_expectations.TryGet(by, out elements))
             {
-                return GetDefault();
+                return null;
+                // return GetDefault();
             }
 
             return elements.FirstOrDefault();

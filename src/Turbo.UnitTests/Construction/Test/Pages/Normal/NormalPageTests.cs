@@ -20,9 +20,15 @@ namespace Turbo.UnitTests.Construction.Test.Pages.Normal
         public void Creates_page()
         {
             var normalElement = new NullElement();
+            WebDriver.Expect(".something", new NullElement());
             WebDriver.Expect("#id", normalElement);
 
-            normalElement.Expect(".simplePart", new NullElement());
+            var simple = new NullElement();
+            normalElement.Expect(".simplePart", simple);
+            normalElement.Expect(".normal", new NullElement());
+
+            simple.Expect(".byClass", new NullElement());
+            simple.Expect("a", new NullElement(), new NullElement(), new NullElement());
 
             var page = GetPage<NormalPage>();
 

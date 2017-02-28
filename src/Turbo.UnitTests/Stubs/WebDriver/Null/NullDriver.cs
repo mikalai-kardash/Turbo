@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using OpenQA.Selenium;
 
 namespace Turbo.UnitTests.Stubs.WebDriver.Null
@@ -42,9 +41,5 @@ namespace Turbo.UnitTests.Stubs.WebDriver.Null
         public string CurrentWindowHandle { get; }
 
         public ReadOnlyCollection<string> WindowHandles { get; }
-
-        public void ExpectFindElements(IEnumerable<NullElement> returns)
-        {
-        }
     }
 }

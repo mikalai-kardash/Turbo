@@ -1,6 +1,6 @@
-﻿selector: '#root'
+﻿selector: '#waitable'
 
-wait: true
+wait: '#something'
 
 elements : {
 	element: '.cool'

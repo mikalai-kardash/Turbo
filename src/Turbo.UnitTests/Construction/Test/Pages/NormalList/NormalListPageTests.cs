@@ -22,11 +22,19 @@ namespace Turbo.UnitTests.Construction.Test.Pages.NormalList
 
             WebDriver.Expect("#widgets", widgets);
 
-            widgets.Expect(
-                ".widget", 
-                new NullElement(), 
-                new NullElement(), 
-                new NullElement());
+            var items = new[] {
+                new NullElement(),
+                new NullElement(),
+                new NullElement()
+            };
+            widgets.Expect(".widget", items);
+
+            foreach (var item in items)
+            {
+                item.Expect("h3", new NullElement());
+                item.Expect("p", new NullElement());
+                item.Expect("div.image", new NullElement());
+            }
 
             var page = GetPage<NormalListPage>();
 
