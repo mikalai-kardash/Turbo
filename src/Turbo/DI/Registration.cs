@@ -7,23 +7,21 @@ namespace Turbo.DI
     {
         private readonly IList<Type> _dependencies = new List<Type>();
 
-        public Type From { get; }
-        public Type To { get; }
-
         public Registration(Type from, Type to)
         {
             From = from;
             To = to;
-
             Dependencies = _dependencies;
         }
 
-        protected void AddDependency(Type type)
+        public Type From { get; }
+        public Type To { get; }
+        public IEnumerable<Type> Dependencies { get; }
+
+        public void AddDependency(Type type)
         {
             _dependencies.Add(type);
         }
-
-        public IEnumerable<Type> Dependencies { get; }
 
         public bool IsRelatedTo(Type type)
         {

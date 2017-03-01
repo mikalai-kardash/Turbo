@@ -90,8 +90,10 @@
     <Compile Include="Construction\Target\ITarget.cs" />
     <Compile Include="Construction\Target\PropertyTarget.cs" />
     <Compile Include="DI\IObjectRegistry.cs" />
+    <Compile Include="DI\ObjectFactoryExtensions.cs" />
+    <Compile Include="DI\ObjectRegistryExtensions.cs" />
     <Compile Include="DI\Registration.cs" />
-    <Compile Include="DI\Registration{TFrom,TTo}.cs" />
+    <Compile Include="DI\RegistrationExtensions.cs" />
     <Compile Include="Events\Message\Errors.cs" />
     <Compile Include="Events\Message\StringExtensions.cs" />
     <Compile Include="Events\Message\TemplatedString.cs" />

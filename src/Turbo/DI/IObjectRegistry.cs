@@ -1,8 +1,11 @@
-﻿namespace Turbo.DI
+﻿using System;
+
+namespace Turbo.DI
 {
     internal interface IObjectRegistry
     {
-        void RegisterInstance<T>(T instance);
-        Registration<TFrom, TTo> RegisterType<TFrom, TTo>() where TTo : TFrom;
+        Registration RegisterType(Type from, Type to);
+
+        void RegisterInstance(Type type, object instance);
     }
 }

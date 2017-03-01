@@ -13,25 +13,19 @@ namespace Turbo.DI
         private readonly IDictionary<Type, Registration> _registrations
             = new Dictionary<Type, Registration>();
 
-        private readonly IDictionary<Type, Delegate> _expressions 
+        private readonly IDictionary<Type, Delegate> _expressions
             = new Dictionary<Type, Delegate>();
 
         public DefaultObjectFactory()
         {
-            RegisterInstance(this);
-            RegisterInstance<IObjectFactory>(this);
-            RegisterInstance<IObjectRegistry>(this);
+            var registry = this as IObjectRegistry;
+
+            registry.RegisterInstance(this);
+            registry.RegisterInstance<IObjectFactory>(this);
+            registry.RegisterInstance<IObjectRegistry>(this);
         }
 
-        public void RegisterInstance<T>(T instance)
-        {
-            _instances.Add(typeof(T), instance);
-        }
-
-        public T GetInstance<T>()
-        {
-            return (T) GetInstance(typeof(T));
-        }
+        #region Factory
 
         public object GetInstance(Type type)
         {
@@ -58,7 +52,9 @@ namespace Turbo.DI
                 }
 
                 var ds = r.Dependencies.Select(GetInstance).ToArray();
-                return Activator.CreateInstance(r.GetConstructionType(type), ds);
+                var ct = r.GetConstructionType(type);
+
+                return Activator.CreateInstance(ct, ds);
             }
             catch (Exception ex)
             {
@@ -86,19 +82,22 @@ namespace Turbo.DI
             return r;
         }
 
-        public Registration<TFrom, TTo> RegisterType<TFrom, TTo>()
-            where TTo : TFrom
+        #endregion
+
+        #region Registry
+
+        public Registration RegisterType(Type from, Type to)
         {
-            var registration = new Registration<TFrom, TTo>();
+            var registration = new Registration(@from, to);
             _registrations.Add(registration.From, registration);
             return registration;
         }
 
-        public Registration RegisterType(Type from, Type to)
+        public void RegisterInstance(Type type, object instance)
         {
-            var registration = new Registration(from, to);
-            _registrations.Add(registration.From, registration);
-            return registration;
+            _instances.Add(type, instance);
         }
+
+        #endregion
     }
 }
