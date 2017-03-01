@@ -33,7 +33,7 @@ namespace Turbo
 
         internal static void ConfigureObjectRegistry(IObjectRegistry registry, TurboConfiguration config)
         {
-            registry.RegisterInstance(GlobalConfiguration.MetadataLoader);
+            registry.Instance(GlobalConfiguration.MetadataLoader);
 
             RegisterBuiltInTypes(registry);
         }
@@ -41,25 +41,25 @@ namespace Turbo
         internal static void RegisterBuiltInTypes(IObjectRegistry registry)
         {
             registry
-                .RegisterType<IInfoProvider, InfoProvider>()
+                .AddType<IInfoProvider, InfoProvider>()
                 .DependsOn<IMetadataLoader>();
 
             registry
-                .RegisterType<IPageAnalyzer, PageAnalyzer>()
+                .AddType<IPageAnalyzer, PageAnalyzer>()
                 .DependsOn<IObjectFactory>()
                 .DependsOn<IInfoProvider>();
 
             registry
-                .RegisterType<IPartAnalyzer, PartAnalyzer>()
+                .AddType<IPartAnalyzer, PartAnalyzer>()
                 .DependsOn<IObjectFactory>()
                 .DependsOn<IInfoProvider>();
 
             registry
-                .RegisterType<IPageFactory, PageFactory>()
+                .AddType<IPageFactory, PageFactory>()
                 .DependsOn<IObjectFactory>();
 
             registry
-                .RegisterType<ITurboFactory, TurboFactory>()
+                .AddType<ITurboFactory, TurboFactory>()
                 .DependsOn<IObjectFactory>()
                 .DependsOn<IInfoProvider>();
         }

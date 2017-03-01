@@ -2,7 +2,7 @@
 
 namespace Turbo.DI
 {
-    public interface IObjectFactory
+    public interface IObjectFactory : IDisposable
     {
         object GetInstance(Type type);
     }

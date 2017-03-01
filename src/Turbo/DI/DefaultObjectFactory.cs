@@ -16,13 +16,15 @@ namespace Turbo.DI
         private readonly IDictionary<Type, Delegate> _expressions
             = new Dictionary<Type, Delegate>();
 
+        private bool _disposed;
+
         public DefaultObjectFactory()
         {
             var registry = this as IObjectRegistry;
 
-            registry.RegisterInstance(this);
-            registry.RegisterInstance<IObjectFactory>(this);
-            registry.RegisterInstance<IObjectRegistry>(this);
+            registry.Instance(this);
+            registry.Instance<IObjectFactory>(this);
+            registry.Instance<IObjectRegistry>(this);
         }
 
         #region Factory
@@ -86,16 +88,55 @@ namespace Turbo.DI
 
         #region Registry
 
-        public Registration RegisterType(Type from, Type to)
+        Registration[] IObjectRegistry.Registrations => _registrations.Values.ToArray();
+
+        Registration IObjectRegistry.RegisterType(Type from, Type to)
         {
-            var registration = new Registration(@from, to);
+            var registration = new Registration(from, to);
             _registrations.Add(registration.From, registration);
             return registration;
         }
 
-        public void RegisterInstance(Type type, object instance)
+        void IObjectRegistry.RegisterInstance(Type type, object instance)
         {
             _instances.Add(type, instance);
+        }
+
+        protected void Uses<T>() where T: Module, new()
+        {
+            var module = new T() as IObjectRegistry;
+            var all = module.Registrations;
+
+            foreach (var registration in all)
+            {
+                _registrations.Add(registration.From, registration);
+            }
+        }
+
+        #endregion
+
+        #region Dispose
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        public void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (!disposing)
+            {
+                return;
+            }
+
+            _instances.Clear();
+
+            _disposed = true;
         }
 
         #endregion

@@ -22,7 +22,7 @@ namespace Turbo.UnitTests.Construction.Test.Pages
 
             var factory = new DefaultObjectFactory();
             TurboInitializer.RegisterBuiltInTypes(factory);
-            factory.RegisterInstance(_loader);
+            factory.Instance(_loader);
 
             PageBuilder = factory.GetInstance<IPageFactory>();
         }

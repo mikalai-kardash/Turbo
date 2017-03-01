@@ -66,6 +66,14 @@
     <Compile Include="Construction\Test\Pages\SimpleList\SimpleListPageTests.cs" />
     <Compile Include="Construction\Test\Pages\Wait\WaitPageTests.cs" />
     <Compile Include="DI\DefaultObjectFactoryTests.cs" />
+    <Compile Include="DI\Modules\ComplexModuleTests.cs" />
+    <Compile Include="DI\Modules\Complex\ComplexModule.cs" />
+    <Compile Include="DI\Modules\Complex\IOtherService.cs" />
+    <Compile Include="DI\Modules\Complex\OtherService.cs" />
+    <Compile Include="DI\Modules\SimpleModuleTests.cs" />
+    <Compile Include="DI\Modules\Simple\IService.cs" />
+    <Compile Include="DI\Modules\Simple\Service.cs" />
+    <Compile Include="DI\Modules\Simple\SimpleModule.cs" />
     <Compile Include="DI\Stubs\Complex\ComplexService.cs" />
     <Compile Include="DI\Stubs\Complex\IComplexService.cs" />
     <Compile Include="DI\Stubs\Simple\ISimpleService.cs" />

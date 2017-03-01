@@ -90,6 +90,7 @@
     <Compile Include="Construction\Target\ITarget.cs" />
     <Compile Include="Construction\Target\PropertyTarget.cs" />
     <Compile Include="DI\IObjectRegistry.cs" />
+    <Compile Include="DI\Module.cs" />
     <Compile Include="DI\ObjectFactoryExtensions.cs" />
     <Compile Include="DI\ObjectRegistryExtensions.cs" />
     <Compile Include="DI\Registration.cs" />

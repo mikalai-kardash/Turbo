@@ -13,11 +13,13 @@ namespace Turbo.UnitTests.DI
     public class DefaultObjectFactoryTests
     {
         private DefaultObjectFactory _factory;
+        private IObjectRegistry _registry;
 
         [TestInitialize]
         public void SetUp()
         {
             _factory = new DefaultObjectFactory();
+            _registry = _factory;
         }
 
         [TestMethod]
@@ -44,7 +46,7 @@ namespace Turbo.UnitTests.DI
         {
             var metadata = new YamlMetadataLoader();
 
-            _factory.RegisterInstance<IMetadataLoader>(metadata);
+            _factory.Instance<IMetadataLoader>(metadata);
             var created = _factory.GetInstance<IMetadataLoader>();
 
             Assert.IsNotNull(created);
@@ -54,7 +56,7 @@ namespace Turbo.UnitTests.DI
         [TestMethod]
         public void Creates_registerd_type_without_dependencies()
         {
-            _factory.RegisterType<ISimpleService, SimpleService>();
+            _factory.AddType<ISimpleService, SimpleService>();
             var service = _factory.GetInstance<ISimpleService>();
 
             Assert.IsNotNull(service);
@@ -63,10 +65,10 @@ namespace Turbo.UnitTests.DI
         [TestMethod]
         public void Creates_registered_type_dependencies()
         {
-            _factory.RegisterType<ISimpleService, SimpleService>();
+            _factory.AddType<ISimpleService, SimpleService>();
 
             _factory
-                .RegisterType<IComplexService, ComplexService>()
+                .AddType<IComplexService, ComplexService>()
                 .DependsOn<ISimpleService>();
 
             var service = _factory.GetInstance<IComplexService>();
@@ -77,7 +79,7 @@ namespace Turbo.UnitTests.DI
         [TestMethod]
         public void Creates_registered_typed_service()
         {
-            _factory.RegisterType(typeof(ITypedService<>), typeof(TypedService<>));
+            _registry.RegisterType(typeof(ITypedService<>), typeof(TypedService<>));
             var service = _factory.GetInstance<ITypedService<SomeClass>>();
             Assert.IsNotNull(service);
         }
