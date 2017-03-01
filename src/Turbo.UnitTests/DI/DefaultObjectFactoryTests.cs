@@ -79,7 +79,7 @@ namespace Turbo.UnitTests.DI
         [TestMethod]
         public void Creates_registered_typed_service()
         {
-            _registry.RegisterType(typeof(ITypedService<>), typeof(TypedService<>));
+            _registry.AddType(typeof(ITypedService<>), typeof(TypedService<>));
             var service = _factory.GetInstance<ITypedService<SomeClass>>();
             Assert.IsNotNull(service);
         }

@@ -7,12 +7,15 @@ namespace Turbo.DI
     {
         private readonly IList<Type> _dependencies = new List<Type>();
 
-        public Registration(Type from, Type to)
+        public Registration(Type from, Type to, string name)
         {
             From = from;
             To = to;
             Dependencies = _dependencies;
+            Id = new TypeId(from, name);
         }
+
+        public TypeId Id { get; }
 
         public Type From { get; }
         public Type To { get; }
@@ -23,8 +26,9 @@ namespace Turbo.DI
             _dependencies.Add(type);
         }
 
-        public bool IsRelatedTo(Type type)
+        public bool IsRelatedTo(TypeId typeId)
         {
+            var type = typeId.Type;
             if (!From.IsConstructedGenericType && type.IsGenericType)
             {
                 return From == type.GetGenericTypeDefinition();

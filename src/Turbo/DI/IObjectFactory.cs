@@ -4,6 +4,6 @@ namespace Turbo.DI
 {
     public interface IObjectFactory : IDisposable
     {
-        object GetInstance(Type type);
+        object GetInstance(Type type, string name);
     }
 }

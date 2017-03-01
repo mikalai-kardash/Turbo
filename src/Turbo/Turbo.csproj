@@ -95,6 +95,7 @@
     <Compile Include="DI\ObjectRegistryExtensions.cs" />
     <Compile Include="DI\Registration.cs" />
     <Compile Include="DI\RegistrationExtensions.cs" />
+    <Compile Include="DI\TypeId.cs" />
     <Compile Include="Events\Message\Errors.cs" />
     <Compile Include="Events\Message\StringExtensions.cs" />
     <Compile Include="Events\Message\TemplatedString.cs" />

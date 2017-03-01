@@ -6,8 +6,8 @@ namespace Turbo.DI
     {
         Registration[] Registrations { get; }
 
-        Registration RegisterType(Type from, Type to);
+        Registration RegisterType(Type from, Type to, string name);
 
-        void RegisterInstance(Type type, object instance);
+        void RegisterInstance(Type type, object instance, string name);
     }
 }
