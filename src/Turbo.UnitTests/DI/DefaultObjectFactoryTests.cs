@@ -83,5 +83,27 @@ namespace Turbo.UnitTests.DI
             var service = _factory.GetInstance<ITypedService<SomeClass>>();
             Assert.IsNotNull(service);
         }
+
+        [TestMethod]
+        public void Creates_cached_instances()
+        {
+            _registry.AddType(typeof(ISimpleService), typeof(SimpleService)).Cached();
+
+            var first = _factory.GetInstance(typeof(ISimpleService));
+            var second = _factory.GetInstance(typeof(ISimpleService));
+
+            Assert.AreEqual(first, second);
+        }
+
+        [TestMethod]
+        public void Creates_named_instances()
+        {
+            const string name = "test";
+
+            _registry.RegisterType(typeof(ISimpleService), typeof(SimpleService), name);
+            var o = _factory.GetInstance(typeof(ISimpleService), name);
+
+            Assert.IsNotNull(o);
+        }
     }
 }

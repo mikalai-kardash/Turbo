@@ -18,5 +18,15 @@ namespace Turbo.DI
         {
             registry.RegisterInstance(typeof(T), instance, string.Empty);
         }
+
+        public static void InstanceOfObjectFactory(this IObjectRegistry registry, IObjectFactory factory)
+        {
+            registry.Instance(factory);
+        }
+
+        public static void InstanceOfObjectRegistry(this IObjectRegistry registry)
+        {
+            registry.Instance(registry);
+        }
     }
 }

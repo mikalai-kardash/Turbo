@@ -5,16 +5,12 @@ using System.Linq.Expressions;
 
 namespace Turbo.DI
 {
-    internal class DefaultObjectFactory : IObjectFactory, IObjectRegistry
+    internal class DefaultObjectFactory : ObjectFactoryTemplate, IObjectRegistry
     {
-        private readonly IDictionary<TypeId, object> _instances
-            = new Dictionary<TypeId, object>();
+        private readonly IObjectCache _objectCache = new ObjectCache();
 
         private readonly IDictionary<TypeId, Registration> _registrations
             = new Dictionary<TypeId, Registration>();
-
-        private readonly IDictionary<TypeId, Delegate> _expressions
-            = new Dictionary<TypeId, Delegate>();
 
         private bool _disposed;
 
@@ -23,64 +19,39 @@ namespace Turbo.DI
             var registry = this as IObjectRegistry;
 
             registry.Instance(this);
-            registry.Instance<IObjectFactory>(this);
-            registry.Instance<IObjectRegistry>(this);
+            registry.InstanceOfObjectRegistry();
+            registry.InstanceOfObjectFactory(this);
         }
 
         #region Factory
 
-        public object GetInstance(Type type, string name)
+        public override IEnumerable<TypeId> AllInstanceIds => _objectCache.AllObjectIds;
+
+        #endregion
+
+        #region Algorithm
+
+        public override object GetInstance(TypeId id)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
-
-            var typeId = new TypeId(type, name);
-
-            try
-            {
-                object instance;
-                if (_instances.TryGetValue(typeId, out instance))
-                {
-                    return instance;
-                }
-
-                object o;
-
-                var r = FindFor(typeId);
-                if (r == null)
-                {
-                    o = CreateUnknownType(type);
-                }
-                else
-                {
-                    // todo: name for dependency
-                    var ds = r.Dependencies
-                        .Select(t => GetInstance(t, string.Empty))
-                        .ToArray();
-
-                    var ct = r.GetConstructionType(type);
-
-                    o = Activator.CreateInstance(ct, ds);
-                }
-
-                return o;
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException($"Unable to create {type}.", ex);
-            }
+            return _objectCache.Get(id);
         }
 
-        private static object CreateUnknownType(Type type)
+        public override object CreateInstance(TypeId id)
         {
-            var l = Expression.Lambda(Expression.New(type));
-            var c = l.Compile();
-            return c.DynamicInvoke();
+            var r = FindTypeRegistration(id);
+            if (r == null) return null;
+
+            var o = CreateObject(id, r);
+
+            if (r.ShouldCache)
+            {
+                CacheObject(id, o);
+            }
+
+            return o;
         }
 
-        private Registration FindFor(TypeId typeId)
+        private Registration FindTypeRegistration(TypeId typeId)
         {
             Registration r;
             if (_registrations.TryGetValue(typeId, out r))
@@ -100,6 +71,22 @@ namespace Turbo.DI
             return r;
         }
 
+        private object CreateObject(TypeId id, Registration r)
+        {
+            var ds = r.Dependencies
+                .Select(t => GetInstance(t, string.Empty))
+                .ToArray();
+
+            var ct = r.GetConstructionType(id.Type);
+
+            return Activator.CreateInstance(ct, ds);
+        }
+
+        private void CacheObject(TypeId typeId, object instance)
+        {
+            _objectCache.Add(typeId, instance);
+        }
+
         #endregion
 
         #region Registry
@@ -115,26 +102,14 @@ namespace Turbo.DI
 
         void IObjectRegistry.RegisterInstance(Type type, object instance, string name)
         {
-            var typeId = new TypeId(type, name);
-            _instances.Add(typeId, instance);
-        }
-
-        protected void Uses<T>() where T: Module, new()
-        {
-            var module = new T() as IObjectRegistry;
-            var all = module.Registrations;
-
-            foreach (var registration in all)
-            {
-                _registrations.Add(registration.Id, registration);
-            }
+            CacheObject(new TypeId(type, name), instance);
         }
 
         #endregion
 
         #region Dispose
 
-        public void Dispose()
+        public override void Dispose()
         {
             Dispose(true);
         }
@@ -151,11 +126,41 @@ namespace Turbo.DI
                 return;
             }
 
-            _instances.Clear();
-
+            _objectCache.Dispose();
             _disposed = true;
         }
 
         #endregion
+
+        protected void Include<T>() where T : Module, new()
+        {
+            var module = new T();
+            var registry = (IObjectRegistry) module;
+            var factory = (IObjectFactory) module;
+
+            var registrations = registry.Registrations;
+            foreach (var registration in registrations)
+            {
+                _registrations.Add(registration.Id, registration);
+            }
+
+            var instanceIds = factory.AllInstanceIds;
+            foreach (var id in instanceIds)
+            {
+                var i = factory.GetInstance(id.Type, id.Name);
+                _objectCache.Add(id, i);
+            }
+        }
+
+        public static object CreateUnknownType(Type type)
+        {
+            var c = CreateUnknownTypeExpression(type).Compile();
+            return c.DynamicInvoke();
+        }
+
+        public static LambdaExpression CreateUnknownTypeExpression(Type type)
+        {
+            return Expression.Lambda(Expression.New(type));
+        }
     }
 }

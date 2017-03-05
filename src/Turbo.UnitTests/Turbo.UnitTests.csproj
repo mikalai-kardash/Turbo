@@ -70,6 +70,10 @@
     <Compile Include="DI\Modules\Complex\ComplexModule.cs" />
     <Compile Include="DI\Modules\Complex\IOtherService.cs" />
     <Compile Include="DI\Modules\Complex\OtherService.cs" />
+    <Compile Include="DI\Modules\Global\GlobalModule.cs" />
+    <Compile Include="DI\Modules\Global\GlobalService.cs" />
+    <Compile Include="DI\Modules\Global\IGlobalService.cs" />
+    <Compile Include="DI\Modules\Local\LocalModule.cs" />
     <Compile Include="DI\Modules\SimpleModuleTests.cs" />
     <Compile Include="DI\Modules\Simple\IService.cs" />
     <Compile Include="DI\Modules\Simple\Service.cs" />
@@ -83,6 +87,7 @@
     <Compile Include="DI\Stubs\Typed\SomeClass.cs" />
     <Compile Include="DI\Stubs\Typed\TypedServiceOfT.cs" />
     <Compile Include="DI\Stubs\Unregistered\SimpleClass.cs" />
+    <Compile Include="DI\TwoTieredFactoryTests.cs" />
     <Compile Include="Events\EventSystemTests.cs" />
     <Compile Include="Events\Reports\SampleConsumer.cs" />
     <Compile Include="Events\Reports\SampleReport.cs" />

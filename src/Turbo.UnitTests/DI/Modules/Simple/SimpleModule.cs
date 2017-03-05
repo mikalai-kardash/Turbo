@@ -6,6 +6,8 @@ namespace Turbo.UnitTests.DI.Modules.Simple
     {
         public SimpleModule()
         {
+            Registry.Instance(new Service());
+
             Registry.AddType<IService, Service>();
         }
     }

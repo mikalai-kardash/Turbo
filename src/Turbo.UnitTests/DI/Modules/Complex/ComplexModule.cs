@@ -7,7 +7,9 @@ namespace Turbo.UnitTests.DI.Modules.Complex
     {
         public ComplexModule()
         {
-            Uses<SimpleModule>();
+            Include<SimpleModule>();
+
+            Registry.Instance(new OtherService());
 
             Registry.AddType<IOtherService, OtherService>();
         }

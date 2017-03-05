@@ -20,6 +20,7 @@ namespace Turbo.DI
         public Type From { get; }
         public Type To { get; }
         public IEnumerable<Type> Dependencies { get; }
+        public bool ShouldCache { get; private set; }
 
         public void AddDependency(Type type)
         {
@@ -46,6 +47,11 @@ namespace Turbo.DI
             }
 
             return To;
+        }
+
+        public void Cached()
+        {
+            ShouldCache = true;
         }
     }
 }
