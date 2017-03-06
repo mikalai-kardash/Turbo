@@ -4,21 +4,42 @@ namespace Turbo.DI
 {
     public sealed class TypeId
     {
-        public TypeId(Type type, string name)
+        private TypeId(Type type, string name)
         {
             Type = type;
             Name = name;
         }
 
+        private TypeId(Type type)
+        {
+            Type = type;
+            Name = string.Empty;
+        }
+
         public Type Type { get; }
         public string Name { get; }
 
-        public override string ToString()
+        #region Factory Methods
+
+        public static TypeId Unnamed(Type type)
         {
-            return $"{Type.FullName}/{Name}";
+            return new TypeId(type);
         }
 
-        #region Equals + GetHashCode
+        public static TypeId Create(Type type, string name)
+        {
+            return new TypeId(type, name);
+        }
+
+        #endregion
+
+
+        #region ToString + Equals + GetHashCode
+
+        public override string ToString()
+        {
+            return $"{Name}:{Type.Name}({Type})";
+        }
 
         protected bool Equals(TypeId other)
         {

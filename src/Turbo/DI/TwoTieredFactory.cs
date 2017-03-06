@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Turbo.DI
 {
@@ -36,7 +35,5 @@ namespace Turbo.DI
         {
             return _local.CreateInstance(id) ?? _global.CreateInstance(id);
         }
-
-        public override IEnumerable<TypeId> AllInstanceIds { get; }
     }
 }

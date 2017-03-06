@@ -21,11 +21,10 @@ namespace Turbo.DI
             registry.Instance(this);
             registry.InstanceOfObjectRegistry();
             registry.InstanceOfObjectFactory(this);
+            registry.Instance(_objectCache);
         }
 
         #region Factory
-
-        public override IEnumerable<TypeId> AllInstanceIds => _objectCache.AllObjectIds;
 
         #endregion
 
@@ -102,7 +101,7 @@ namespace Turbo.DI
 
         void IObjectRegistry.RegisterInstance(Type type, object instance, string name)
         {
-            CacheObject(new TypeId(type, name), instance);
+            CacheObject(TypeId.Create(type, name), instance);
         }
 
         #endregion
@@ -135,8 +134,8 @@ namespace Turbo.DI
         protected void Include<T>() where T : Module, new()
         {
             var module = new T();
-            var registry = (IObjectRegistry) module;
-            var factory = (IObjectFactory) module;
+
+            var registry = module.GetInstance<IObjectRegistry>();
 
             var registrations = registry.Registrations;
             foreach (var registration in registrations)
@@ -144,9 +143,16 @@ namespace Turbo.DI
                 _registrations.Add(registration.Id, registration);
             }
 
-            var instanceIds = factory.AllInstanceIds;
-            foreach (var id in instanceIds)
+            var factory = module.GetInstance<IObjectFactory>();
+            var cache = factory.GetInstance<IObjectCache>();
+
+            foreach (var id in cache.AllObjectIds)
             {
+                if (id == InternalTypeIds.DefaultObjectFactory) continue;
+                if (id == InternalTypeIds.ObjectRegistry) continue;
+                if (id == InternalTypeIds.ObjectFactory) continue;
+                if (id == InternalTypeIds.ObjectCache) continue;
+
                 var i = factory.GetInstance(id.Type, id.Name);
                 _objectCache.Add(id, i);
             }
@@ -154,6 +160,11 @@ namespace Turbo.DI
 
         public static object CreateUnknownType(Type type)
         {
+            if (type.IsInterface || type.IsAbstract)
+            {
+                throw new InvalidOperationException(
+                    $"Cannot create instance of interface or abstract class: {type.Name} ({type}).");
+            }
             var c = CreateUnknownTypeExpression(type).Compile();
             return c.DynamicInvoke();
         }

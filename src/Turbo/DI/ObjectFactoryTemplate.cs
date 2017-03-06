@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace Turbo.DI
 {
@@ -12,7 +11,7 @@ namespace Turbo.DI
                 throw new ArgumentNullException(nameof(type));
             }
 
-            var typeId = new TypeId(type, name);
+            var typeId = TypeId.Create(type, name);
 
             try
             {
@@ -40,6 +39,5 @@ namespace Turbo.DI
 
         public abstract object GetInstance(TypeId id);
         public abstract object CreateInstance(TypeId id);
-        public abstract IEnumerable<TypeId> AllInstanceIds { get; }
     }
 }

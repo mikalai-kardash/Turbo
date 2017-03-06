@@ -9,49 +9,43 @@ namespace Turbo.DI
 
         public Registration(Type from, Type to, string name)
         {
-            From = from;
+            Id = TypeId.Create(from, name);
             To = to;
+
             Dependencies = _dependencies;
-            Id = new TypeId(from, name);
         }
 
         public TypeId Id { get; }
-
-        public Type From { get; }
         public Type To { get; }
+
         public IEnumerable<Type> Dependencies { get; }
-        public bool ShouldCache { get; private set; }
+        public bool ShouldCache { get; internal set; }
 
         public void AddDependency(Type type)
         {
             _dependencies.Add(type);
         }
 
-        public bool IsRelatedTo(TypeId typeId)
+        public bool IsRelatedTo(TypeId other)
         {
-            var type = typeId.Type;
-            if (!From.IsConstructedGenericType && type.IsGenericType)
+            var type = other.Type;
+            if (!Id.Type.IsConstructedGenericType && type.IsGenericType)
             {
-                return From == type.GetGenericTypeDefinition();
+                return Id.Type == type.GetGenericTypeDefinition();
             }
 
-            return type == From;
+            return type == Id.Type;
         }
 
         public Type GetConstructionType(Type type)
         {
-            if (type.IsGenericType && !From.IsConstructedGenericType)
+            if (type.IsGenericType && !Id.Type.IsConstructedGenericType)
             {
                 var args = type.GetGenericArguments();
                 return To.MakeGenericType(args);
             }
 
             return To;
-        }
-
-        public void Cached()
-        {
-            ShouldCache = true;
         }
     }
 }

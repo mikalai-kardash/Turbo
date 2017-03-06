@@ -7,5 +7,11 @@
             registration.AddDependency(typeof(T));
             return registration;
         }
+
+        public static Registration Cached(this Registration registration)
+        {
+            registration.ShouldCache = true;
+            return registration;
+        }
     }
 }
