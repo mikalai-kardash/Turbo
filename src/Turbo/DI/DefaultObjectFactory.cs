@@ -8,9 +8,7 @@ namespace Turbo.DI
     internal class DefaultObjectFactory : ObjectFactoryTemplate, IObjectRegistry
     {
         private readonly IObjectCache _objectCache = new ObjectCache();
-
-        private readonly IDictionary<TypeId, Registration> _registrations
-            = new Dictionary<TypeId, Registration>();
+        private readonly ITypeCache _typeCache = new TypeCache();
 
         private bool _disposed;
 
@@ -22,6 +20,7 @@ namespace Turbo.DI
             registry.InstanceOfObjectRegistry();
             registry.InstanceOfObjectFactory(this);
             registry.Instance(_objectCache);
+            registry.Instance(_typeCache);
         }
 
         #region Algorithm
@@ -33,12 +32,14 @@ namespace Turbo.DI
 
         public override object CreateInstance(TypeId id)
         {
-            var r = FindTypeRegistration(id);
-            if (r == null) return null;
+            var registration = _typeCache.Find(id);
+            if (registration == null) return null;
 
-            var o = CreateObject(id, r);
+            var o = CreateObject(
+                registration.GetConstructionType(id.Type), 
+                registration.Dependencies);
 
-            if (r.ShouldCache)
+            if (registration.ShouldCache)
             {
                 CacheObject(id, o);
             }
@@ -46,35 +47,13 @@ namespace Turbo.DI
             return o;
         }
 
-        private Registration FindTypeRegistration(TypeId typeId)
+        private object CreateObject(Type type, IEnumerable<Type> dependencies)
         {
-            Registration r;
-            if (_registrations.TryGetValue(typeId, out r))
-            {
-                return r;
-            }
-
-            foreach (var registration in _registrations.Values)
-            {
-                if (registration.IsRelatedTo(typeId))
-                {
-                    r = registration;
-                    break;
-                }
-            }
-
-            return r;
-        }
-
-        private object CreateObject(TypeId id, Registration r)
-        {
-            var ds = r.Dependencies
+            var ds = dependencies
                 .Select(t => GetInstance(t, string.Empty))
                 .ToArray();
 
-            var ct = r.GetConstructionType(id.Type);
-
-            return Activator.CreateInstance(ct, ds);
+            return Activator.CreateInstance(type, ds);
         }
 
         private void CacheObject(TypeId typeId, object instance)
@@ -86,12 +65,10 @@ namespace Turbo.DI
 
         #region Registry
 
-        Registration[] IObjectRegistry.Registrations => _registrations.Values.ToArray();
-
         Registration IObjectRegistry.RegisterType(Type from, Type to, string name)
         {
             var registration = new Registration(from, to, name);
-            _registrations.Add(registration.Id, registration);
+            _typeCache.Add(registration);
             return registration;
         }
 
@@ -131,25 +108,22 @@ namespace Turbo.DI
         {
             var module = new T();
 
-            var registry = module.GetInstance<IObjectRegistry>();
-
-            var registrations = registry.Registrations;
-            foreach (var registration in registrations)
+            var typeCache = module.GetInstance<ITypeCache>();
+            foreach (var registration in typeCache.All)
             {
-                _registrations.Add(registration.Id, registration);
+                _typeCache.Add(registration);
             }
 
-            var factory = module.GetInstance<IObjectFactory>();
-            var cache = factory.GetInstance<IObjectCache>();
-
+            var cache = module.GetInstance<IObjectCache>();
             foreach (var id in cache.AllObjectIds)
             {
                 if (id == InternalTypeIds.DefaultObjectFactory) continue;
                 if (id == InternalTypeIds.ObjectRegistry) continue;
                 if (id == InternalTypeIds.ObjectFactory) continue;
                 if (id == InternalTypeIds.ObjectCache) continue;
+                if (id == InternalTypeIds.TypeCache) continue;
 
-                var i = factory.GetInstance(id.Type, id.Name);
+                var i = module.GetInstance(id.Type, id.Name);
                 _objectCache.Add(id, i);
             }
         }
