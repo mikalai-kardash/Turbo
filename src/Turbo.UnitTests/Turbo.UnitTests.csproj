@@ -73,7 +73,9 @@
     <Compile Include="DI\Modules\Global\GlobalModule.cs" />
     <Compile Include="DI\Modules\Global\GlobalService.cs" />
     <Compile Include="DI\Modules\Global\IGlobalService.cs" />
+    <Compile Include="DI\Modules\Local\ILocalService.cs" />
     <Compile Include="DI\Modules\Local\LocalModule.cs" />
+    <Compile Include="DI\Modules\Local\LocalService.cs" />
     <Compile Include="DI\Modules\SimpleModuleTests.cs" />
     <Compile Include="DI\Modules\Simple\IService.cs" />
     <Compile Include="DI\Modules\Simple\Service.cs" />

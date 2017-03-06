@@ -8,6 +8,10 @@ namespace Turbo.UnitTests.DI.Modules.Local
         public LocalModule()
         {
             Include<ComplexModule>();
+
+            Registry.Instance(new LocalService());
+
+            Registry.AddType<ILocalService, LocalService>();
         }
     }
 }

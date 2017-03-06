@@ -26,6 +26,7 @@ namespace Turbo.UnitTests.DI
             CanCreate<IGlobalService>();
             CanCreate<IService>();
             CanCreate<IOtherService>();
+            CanCreate<ILocalService>();
         }
 
         [TestMethod]
@@ -34,6 +35,7 @@ namespace Turbo.UnitTests.DI
             CanGet<GlobalService>();
             CanGet<Service>();
             CanGet<OtherService>();
+            CanGet<LocalService>();
         }
 
         private void CanGet<T>()

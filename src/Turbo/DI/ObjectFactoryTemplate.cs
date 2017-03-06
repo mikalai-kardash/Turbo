@@ -35,7 +35,9 @@ namespace Turbo.DI
             }
         }
 
-        public abstract void Dispose();
+        public virtual void Dispose()
+        {
+        }
 
         public abstract object GetInstance(TypeId id);
         public abstract object CreateInstance(TypeId id);

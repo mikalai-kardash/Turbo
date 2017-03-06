@@ -24,10 +24,6 @@ namespace Turbo.DI
             registry.Instance(_objectCache);
         }
 
-        #region Factory
-
-        #endregion
-
         #region Algorithm
 
         public override object GetInstance(TypeId id)

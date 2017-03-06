@@ -22,10 +22,6 @@ namespace Turbo.DI
             _local = local;
         }
 
-        public override void Dispose()
-        {
-        }
-
         public override object GetInstance(TypeId id)
         {
             return _local.GetInstance(id) ?? _global.GetInstance(id);
