@@ -19,7 +19,7 @@ namespace Turbo
                 Assembly.GetCallingAssembly(),
                 Assembly.GetEntryAssembly()
             },
-            ObjectFactory = new DefaultObjectFactory(),
+            ObjectFactory = new SimpleObjectFactory(),
             MetadataLoader = new YamlMetadataLoader()
         };
     }

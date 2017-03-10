@@ -2,7 +2,7 @@
 
 namespace Turbo.DI
 {
-    internal interface IObjectRegistry : IDisposable
+    public interface IObjectFactoryRegistry : IDisposable
     {
         Registration RegisterType(Type from, Type to, string name);
 

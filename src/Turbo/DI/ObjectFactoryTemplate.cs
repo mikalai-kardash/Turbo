@@ -27,7 +27,7 @@ namespace Turbo.DI
                     return instance;
                 }
 
-                return DefaultObjectFactory.CreateUnknownType(type);
+                return SimpleObjectFactory.CreateUnknownType(type);
             }
             catch (Exception ex)
             {

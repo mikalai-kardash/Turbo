@@ -25,20 +25,20 @@ namespace Turbo
         public static ITurboFactory Init(TurboConfiguration configuration)
         {
             ConfigureObjectRegistry(
-                (IObjectRegistry) configuration.ObjectFactory,
+                (IObjectFactoryRegistry) configuration.ObjectFactory,
                 configuration);
 
             return configuration.ObjectFactory.GetInstance<ITurboFactory>();
         }
 
-        internal static void ConfigureObjectRegistry(IObjectRegistry registry, TurboConfiguration config)
+        internal static void ConfigureObjectRegistry(IObjectFactoryRegistry registry, TurboConfiguration config)
         {
             registry.Instance(GlobalConfiguration.MetadataLoader);
 
             RegisterBuiltInTypes(registry);
         }
 
-        internal static void RegisterBuiltInTypes(IObjectRegistry registry)
+        internal static void RegisterBuiltInTypes(IObjectFactoryRegistry registry)
         {
             registry
                 .AddType<IInfoProvider, InfoProvider>()

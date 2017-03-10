@@ -53,12 +53,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Behavior\Errors.cs" />
-    <Compile Include="Behavior\IError.cs" />
+    <Compile Include="CacheModule.cs" />
     <Compile Include="Cache\IInfoProvider.cs" />
     <Compile Include="Cache\InfoProvider.cs" />
     <Compile Include="Cache\ISelectorFinder.cs" />
     <Compile Include="Cache\NullSelectorFinder.cs" />
+    <Compile Include="ConstructionModule.cs" />
     <Compile Include="Construction\Analysis.cs" />
     <Compile Include="Cache\Info\AppInfo.cs" />
     <Compile Include="Construction\BaseAnalyzer.cs" />
@@ -92,7 +92,7 @@
     <Compile Include="DI\IFactoryAlgorithm.cs" />
     <Compile Include="DI\InternalTypeIds.cs" />
     <Compile Include="DI\IObjectCache.cs" />
-    <Compile Include="DI\IObjectRegistry.cs" />
+    <Compile Include="DI\IObjectFactoryRegistry.cs" />
     <Compile Include="DI\ITypeCache.cs" />
     <Compile Include="DI\Module.cs" />
     <Compile Include="DI\ObjectCache.cs" />
@@ -104,6 +104,7 @@
     <Compile Include="DI\TwoTieredFactory.cs" />
     <Compile Include="DI\TypeId.cs" />
     <Compile Include="DI\TypeCache.cs" />
+    <Compile Include="EventsModule.cs" />
     <Compile Include="Events\Message\Errors.cs" />
     <Compile Include="Events\Message\StringExtensions.cs" />
     <Compile Include="Events\Message\TemplatedString.cs" />
@@ -140,10 +141,11 @@
     <Compile Include="ITurboFactory.cs" />
     <Compile Include="Metadata\IMetadataLoader.cs" />
     <Compile Include="Metadata\AppMeta{T}.cs" />
+    <Compile Include="Metadata\MetadataModule.cs" />
     <Compile Include="Metadata\Metadata{TMeta}.cs" />
     <Compile Include="Metadata\Metadata{T,TMeta}.cs" />
     <Compile Include="Metadata\Models\App.cs" />
-    <Compile Include="DI\DefaultObjectFactory.cs" />
+    <Compile Include="DI\SimpleObjectFactory.cs" />
     <Compile Include="DI\IObjectFactory.cs" />
     <Compile Include="Metadata\Models\Extensions.cs" />
     <Compile Include="Metadata\Models\Page.cs" />
@@ -163,6 +165,7 @@
     <Compile Include="Cache\TurboSync.cs" />
     <Compile Include="Construction\TypeAnalyzer.cs" />
     <Compile Include="Metadata\Yaml\YamlMetadataLoader.cs" />
+    <Compile Include="TurboModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

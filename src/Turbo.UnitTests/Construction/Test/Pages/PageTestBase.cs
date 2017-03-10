@@ -20,7 +20,7 @@ namespace Turbo.UnitTests.Construction.Test.Pages
             _loader = new YamlMetadataLoader();
             WebDriver = new NullDriver();
 
-            var factory = new DefaultObjectFactory();
+            var factory = new SimpleObjectFactory();
             TurboInitializer.RegisterBuiltInTypes(factory);
             factory.Instance(_loader);
 

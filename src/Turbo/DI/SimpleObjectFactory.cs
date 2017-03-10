@@ -5,16 +5,16 @@ using System.Linq.Expressions;
 
 namespace Turbo.DI
 {
-    internal class DefaultObjectFactory : ObjectFactoryTemplate, IObjectRegistry
+    public class SimpleObjectFactory : ObjectFactoryTemplate, IObjectFactoryRegistry
     {
         private readonly IObjectCache _objectCache = new ObjectCache();
         private readonly ITypeCache _typeCache = new TypeCache();
 
         private bool _disposed;
 
-        public DefaultObjectFactory()
+        public SimpleObjectFactory()
         {
-            var registry = this as IObjectRegistry;
+            var registry = this as IObjectFactoryRegistry;
 
             registry.Instance(this);
             registry.InstanceOfObjectRegistry();
@@ -41,7 +41,7 @@ namespace Turbo.DI
 
             if (registration.ShouldCache)
             {
-                CacheObject(id, o);
+                _objectCache.Add(id, o);
             }
 
             return o;
@@ -56,25 +56,21 @@ namespace Turbo.DI
             return Activator.CreateInstance(type, ds);
         }
 
-        private void CacheObject(TypeId typeId, object instance)
-        {
-            _objectCache.Add(typeId, instance);
-        }
-
         #endregion
 
         #region Registry
 
-        Registration IObjectRegistry.RegisterType(Type from, Type to, string name)
+        Registration IObjectFactoryRegistry.RegisterType(Type from, Type to, string name)
         {
             var registration = new Registration(from, to, name);
             _typeCache.Add(registration);
             return registration;
         }
 
-        void IObjectRegistry.RegisterInstance(Type type, object instance, string name)
+        void IObjectFactoryRegistry.RegisterInstance(Type type, object instance, string name)
         {
-            CacheObject(TypeId.Create(type, name), instance);
+            var id = TypeId.Create(type, name);
+            _objectCache.Add(id, instance);
         }
 
         #endregion
@@ -103,30 +99,6 @@ namespace Turbo.DI
         }
 
         #endregion
-
-        protected void Include<T>() where T : Module, new()
-        {
-            var module = new T();
-
-            var typeCache = module.GetInstance<ITypeCache>();
-            foreach (var registration in typeCache.All)
-            {
-                _typeCache.Add(registration);
-            }
-
-            var cache = module.GetInstance<IObjectCache>();
-            foreach (var id in cache.AllObjectIds)
-            {
-                if (id == InternalTypeIds.DefaultObjectFactory) continue;
-                if (id == InternalTypeIds.ObjectRegistry) continue;
-                if (id == InternalTypeIds.ObjectFactory) continue;
-                if (id == InternalTypeIds.ObjectCache) continue;
-                if (id == InternalTypeIds.TypeCache) continue;
-
-                var i = module.GetInstance(id.Type, id.Name);
-                _objectCache.Add(id, i);
-            }
-        }
 
         public static object CreateUnknownType(Type type)
         {

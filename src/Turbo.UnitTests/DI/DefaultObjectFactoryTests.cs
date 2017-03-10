@@ -12,13 +12,13 @@ namespace Turbo.UnitTests.DI
     [TestClass]
     public class DefaultObjectFactoryTests
     {
-        private DefaultObjectFactory _factory;
-        private IObjectRegistry _registry;
+        private SimpleObjectFactory _factory;
+        private IObjectFactoryRegistry _registry;
 
         [TestInitialize]
         public void SetUp()
         {
-            _factory = new DefaultObjectFactory();
+            _factory = new SimpleObjectFactory();
             _registry = _factory;
         }
 
@@ -32,7 +32,7 @@ namespace Turbo.UnitTests.DI
         public void Creates_itself()
         {
             var createdInterface = _factory.GetInstance<IObjectFactory>();
-            var createdClass = _factory.GetInstance<DefaultObjectFactory>();
+            var createdClass = _factory.GetInstance<SimpleObjectFactory>();
 
             Assert.IsNotNull(createdInterface);
             Assert.IsNotNull(createdClass);
@@ -104,6 +104,15 @@ namespace Turbo.UnitTests.DI
             var o = _factory.GetInstance(typeof(ISimpleService), name);
 
             Assert.IsNotNull(o);
+        }
+
+        [TestMethod]
+        public void Creates_registered_instance_without_dependency()
+        {
+            _registry.AddType<ISimpleService, SimpleService>();
+            _registry.AddType<IComplexService, ComplexService>();
+            var service = _factory.GetInstance<IComplexService>();
+            Assert.IsNotNull(service);
         }
     }
 }

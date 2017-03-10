@@ -9,11 +9,11 @@ namespace Turbo
         static GlobalConfiguration()
         {
             MetadataLoader = new YamlMetadataLoader();
-            ObjectFactory = new DefaultObjectFactory();
+            ObjectFactory = new SimpleObjectFactory();
         }
 
         public static IMetadataLoader MetadataLoader { get; }
 
-        public static DefaultObjectFactory ObjectFactory { get; }
+        public static SimpleObjectFactory ObjectFactory { get; }
     }
 }

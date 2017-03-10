@@ -8,6 +8,12 @@
             return registration;
         }
 
+        public static Registration WithAlias<T>(this Registration registration)
+        {
+            registration.AddAlias(typeof(T));
+            return registration;
+        }
+
         public static Registration Cached(this Registration registration)
         {
             registration.ShouldCache = true;
